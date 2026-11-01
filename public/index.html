@@ -1,0 +1,2179 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>속까마귀 · 그 사람도 나랑 같은 마음일까?</title>
+<meta name="description" content="카톡 대화를 올리면 답장 속도, 질문, 말투로 쌍방 신호를 읽어 드려요. 그 사람 말투를 익힌 AI와 미리 대화해 보세요.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="속까마귀 · 그 사람도 나랑 같은 마음일까?">
+<meta property="og:description" content="카톡 대화로 읽는 쌍방 신호 리포트와 그 사람 AI 채팅">
+<meta property="og:image" content="/og.png">
+<meta name="theme-color" content="#0a0f24">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>body{margin:0}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;800&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* Layout: midnight tarot world. Gold-leaf tarot card illustration in the hero, pale paper report sheets on a deep ink page, login-first flow. */
+:root{
+  --ink:#0a0f24; --ink2:#131a38; --ink3:#1d2650; --line:#2a3566;
+  --text:#eef0fa; --muted:#a4acd2;
+  --gold:#e9b84f; --gold-hi:#fbe7ae; --gold-lo:#a8742a; --gold-ink:#2a2105;
+  --rose:#ff8a9b;
+  --paper:#f4f4fb; --paper-ink:#1a2040; --paper-muted:#585f8c; --paper-line:#dcdff0;
+  --me:#4453d6; --you:#f0576b; --amber:#e8a817;
+  --kakao:#fee500; --kakao-ink:#191919;
+  --serif:'Noto Serif KR','Batang',serif;
+  --body:'Noto Sans KR',system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--ink); color:var(--text);
+  font-family:var(--body); font-size:16px; line-height:1.7; word-break:keep-all; overflow-wrap:break-word;
+  padding-block:0;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+}
+h1,h2,h3,h4,p,dl,dd,ul,ol{margin:0}
+ul,ol{padding:0;list-style:none}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto}
+.ic{display:block;width:100%;height:auto}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 24px;border-radius:999px;font-weight:700;font-size:16px;text-decoration:none;border:2px solid transparent;cursor:pointer;font-family:var(--body);line-height:1.2}
+.btn-gold{background:linear-gradient(135deg,var(--gold-hi),var(--gold) 55%,#d29a35);color:var(--gold-ink)}
+.btn-gold:hover{filter:brightness(1.07)}
+.btn-kakao{background:var(--kakao);color:var(--kakao-ink)}
+.btn-kakao:hover{filter:brightness(.96)}
+.btn-kakao svg{width:20px;height:20px;fill:var(--kakao-ink)}
+.btn-ghost{border-color:var(--line);color:var(--text);background:transparent}
+.btn-ghost:hover{border-color:var(--muted)}
+.btn-sm{min-height:40px;padding:0 16px;font-size:14px}
+.btn:focus-visible,a:focus-visible,summary:focus-visible,.tab:focus-visible,.xbtn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:16px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:800;font-size:22px;text-decoration:none;color:var(--text)}
+.brand .ic{width:36px;flex:none}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(28px,5vw,64px);align-items:center;padding-block:clamp(24px,5vw,56px) clamp(56px,8vw,96px)}
+.hero>*{min-width:0}
+.pill{display:inline-block;padding:4px 14px;border:1px solid var(--gold-lo);border-radius:999px;color:var(--gold-hi);font-size:13px;margin-bottom:18px}
+h1{font-family:var(--serif);font-weight:800;font-size:clamp(34px,6vw,60px);line-height:1.25;text-wrap:balance}
+h1 em{font-style:normal;background:linear-gradient(135deg,var(--gold-hi),var(--gold) 60%,#d29a35);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{margin-top:20px;color:var(--muted);font-size:clamp(16px,2.2vw,19px);max-width:32em}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.fine{margin-top:16px;color:var(--muted);font-size:13px}
+
+/* tarot stage */
+.stage{position:relative;width:100%;max-width:380px;justify-self:center;margin-bottom:36px}
+.tarot{display:block;width:100%;height:auto;filter:drop-shadow(0 30px 50px rgba(0,0,0,.6))}
+.t-top{font-family:var(--body);font-size:10.5px;letter-spacing:.4em;font-weight:500;fill:url(#gGold)}
+.t-name{font-family:var(--serif);font-size:23px;font-weight:800;letter-spacing:.12em;fill:url(#gGold)}
+.card-score{position:absolute;left:-20%;bottom:15%;width:54%;background:var(--paper);color:var(--paper-ink);border-radius:16px;padding:14px;box-shadow:0 18px 40px rgba(0,0,0,.5);transform:rotate(-2.5deg)}
+.cs-row{display:flex;align-items:center;gap:12px}
+.ring{--p:72;flex:none;width:68px;height:68px;border-radius:50%;background:conic-gradient(var(--amber) calc(var(--p)*1%),var(--paper-line) 0);display:grid;place-items:center;position:relative}
+.ring::before{content:"";position:absolute;inset:7px;border-radius:50%;background:var(--paper)}
+.ring b{position:relative;font-family:var(--serif);font-weight:800;font-size:22px;line-height:1;font-variant-numeric:tabular-nums}
+.cs-lab{font-size:11px;color:var(--paper-muted);font-weight:500;line-height:1.3}
+.cs-type{font-family:var(--serif);font-weight:800;font-size:16px;line-height:1.3}
+.cs-quote{margin-top:10px;font-size:12px;line-height:1.5;padding:8px 10px;background:#e7e9f6;border-radius:10px}
+.cs-tag{position:absolute;top:-9px;right:10px;font-size:10px;font-weight:700;padding:2px 10px;border-radius:999px;background:var(--gold);color:var(--gold-ink)}
+
+/* sections */
+.sec{padding-block:clamp(40px,7vw,80px)}
+.sec-head{max-width:36em;margin-bottom:clamp(24px,4vw,40px)}
+.kicker{color:var(--gold);font-weight:700;font-size:14px;margin-bottom:8px}
+h2{font-family:var(--serif);font-weight:800;font-size:clamp(26px,4.4vw,40px);line-height:1.3;text-wrap:balance}
+.sec-head p{margin-top:12px;color:var(--muted)}
+
+/* worries */
+.worries{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.worries li{background:var(--ink2);border:1px solid var(--line);border-radius:18px;border-bottom-left-radius:4px;padding:18px 20px;font-size:17px;font-weight:500;min-width:0}
+.worries li:nth-child(even){border-bottom-left-radius:18px;border-bottom-right-radius:4px;background:var(--ink3)}
+.worry-end{margin-top:26px;font-family:var(--serif);font-weight:600;font-size:clamp(18px,2.8vw,24px);line-height:1.6;max-width:30em}
+.worry-end b{color:var(--gold-hi);font-weight:800}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.steps li{background:var(--ink2);border:1px solid var(--line);border-radius:16px;padding:22px;min-width:0}
+.step-n{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold-hi),var(--gold));color:var(--gold-ink);font-weight:700;font-size:15px;margin-bottom:14px}
+.steps h3{font-size:18px;margin-bottom:6px}
+.steps p{color:var(--muted);font-size:15px}
+
+/* loading */
+.sky{position:relative;overflow:hidden;border-radius:22px;background:linear-gradient(180deg,#121a45 0%,#242265 100%);border:1px solid var(--line);height:200px}
+.sky::after{content:"";position:absolute;left:0;right:0;bottom:0;height:60px;background:linear-gradient(0deg,rgba(10,15,36,.7),transparent)}
+.moon-s{position:absolute;right:9%;top:22px;width:58px;height:58px;border-radius:50%;background:radial-gradient(circle at 38% 34%,#fff6dc,#f1dca2 55%,#cda85f);box-shadow:0 0 40px 10px rgba(255,225,150,.25)}
+.star{position:absolute;width:3px;height:3px;border-radius:50%;background:#cfd6ff;opacity:.75}
+.flyer{position:absolute;top:30px;left:-280px;width:250px;animation:fly 7.5s linear infinite;z-index:1}
+.flyer svg{display:block;width:100%;height:auto;animation:bob 1.2s ease-in-out infinite alternate;overflow:visible}
+.w{transform-box:view-box;transform-origin:104px 60px;animation:flap .5s ease-in-out infinite alternate}
+@keyframes fly{from{left:-280px}to{left:100%}}
+@keyframes bob{from{transform:translateY(-6px)}to{transform:translateY(6px)}}
+@keyframes flap{from{transform:rotate(8deg)}to{transform:rotate(-38deg)}}
+.load-msg{margin-top:20px;text-align:center;font-size:clamp(16px,2.6vw,20px);font-weight:500}
+.load-bar{height:6px;border-radius:99px;background:var(--ink3);margin:16px auto 0;max-width:360px;overflow:hidden}
+.load-bar i{display:block;height:100%;width:40%;border-radius:99px;background:linear-gradient(90deg,var(--gold),var(--gold-hi));animation:slide 2.2s ease-in-out infinite}
+@keyframes slide{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}
+
+/* tabs */
+.tabs{display:inline-flex;flex-wrap:wrap;gap:4px;padding:4px;border-radius:999px;background:var(--ink2);border:1px solid var(--line);margin-bottom:22px}
+.tab{border:0;background:transparent;color:var(--muted);padding:8px 18px;border-radius:999px;font:700 14px var(--body);cursor:pointer;min-height:40px}
+.tab[aria-selected="true"]{background:linear-gradient(135deg,var(--gold-hi),var(--gold));color:var(--gold-ink)}
+
+/* report sheet */
+.sheet{background:var(--paper);color:var(--paper-ink);border-radius:22px;padding:clamp(18px,3.5vw,36px);box-shadow:0 24px 60px rgba(0,0,0,.4)}
+.sheet-top{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding-bottom:18px;border-bottom:2px solid var(--paper-ink)}
+.sheet-top .ic{width:38px;flex:none}
+.sheet-top h3{font-family:var(--serif);font-weight:800;font-size:23px}
+.tag{margin-left:auto;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--paper-line);color:var(--paper-muted)}
+.summary{margin-top:18px;font-size:clamp(16px,2.4vw,19px);font-weight:500;max-width:40em}
+.summary b{background:linear-gradient(transparent 58%,#ffe08a 58%)}
+.sheet-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(24px,4vw,48px);margin-top:28px}
+.sheet-grid>*{min-width:0}
+.blk+.blk{margin-top:30px}
+.blk h4{font-size:17px;margin:0 0 4px}
+.blk .sub{font-size:13px;color:var(--paper-muted);margin-bottom:14px}
+.legend{display:flex;gap:16px;font-size:13px;color:var(--paper-muted);margin-bottom:14px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dot.me{background:var(--me)}.dot.you{background:var(--you)}
+.metric{padding:14px 0;border-bottom:1px dashed var(--paper-line)}
+.metric:first-of-type{padding-top:0}
+.m-label{font-weight:700;font-size:15px;margin-bottom:8px}
+.m-row{display:grid;grid-template-columns:34px minmax(0,1fr) 62px;gap:10px;align-items:center;margin-top:5px}
+.who{font-size:13px;font-weight:700}
+.who.me{color:var(--me)}.who.you{color:#d03a50}
+.bar{height:10px;border-radius:99px;background:var(--paper-line);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px}
+.me i{background:var(--me)}.you i{background:var(--you)}
+.m-row b{text-align:right;font-size:15px;font-variant-numeric:tabular-nums}
+.m-note{margin-top:8px;font-size:13px;color:var(--paper-muted)}
+
+.sigs li{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px dashed var(--paper-line);font-size:15px}
+.sigs li:first-child{padding-top:0}
+.si{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;line-height:1}
+.si.on{background:var(--me);color:#fff}
+.si.mid{background:#f2c14e;color:#3a2a05}
+.si.off{background:var(--paper-line);color:var(--paper-muted)}
+.sigs em{font-style:normal;font-size:13px;color:var(--paper-muted);white-space:nowrap}
+
+.tchart{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;align-items:end;border-bottom:2px solid var(--paper-ink);padding-top:6px}
+.slot{display:flex;justify-content:center;align-items:flex-end;gap:5px;height:130px}
+.col{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;width:min(26px,38%)}
+.col i{display:block;width:100%;border-radius:6px 6px 0 0}
+.col.me i{background:var(--me)}.col.you i{background:var(--you)}
+.tlabels{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:6px;text-align:center;font-size:12px;color:var(--paper-muted);line-height:1.4}
+.tlabels b{display:block;color:var(--paper-ink);font-size:13px}
+.unit-note{font-size:12px;color:var(--paper-muted);margin-top:8px}
+
+.kw{display:grid;gap:8px}
+.kw li{display:grid;grid-template-columns:minmax(0,92px) minmax(0,1fr) 40px;gap:10px;align-items:center;font-size:14px}
+.kw .bar i{background:var(--paper-ink)}
+.kw b{text-align:right;font-variant-numeric:tabular-nums}
+.care li{padding:12px 0;border-bottom:1px dashed var(--paper-line)}
+.care li:first-child{padding-top:0}
+.care strong{display:block;font-size:15px}
+.care span{display:block;font-size:14px;color:var(--paper-muted);margin-top:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips li{padding:6px 14px;border-radius:999px;background:#e3e6f6;font-size:14px;font-weight:500}
+
+.locked{position:relative;margin-top:30px;border-radius:16px;border:2px dashed var(--paper-muted);padding:20px;overflow:hidden}
+.locked h4{font-size:17px;margin-bottom:10px}
+.blur{filter:blur(6px);user-select:none;display:grid;gap:10px;font-size:15px}
+.lock-cover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:16px;background:rgba(244,244,251,.58)}
+.lock-cover p{font-weight:700;font-size:16px}
+.lock-cover svg{width:28px;height:28px;stroke:var(--paper-ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* not enough data */
+.nodata{text-align:center;max-width:560px;margin:0 auto;padding:12px 0 8px}
+.q-plate{width:84px;height:84px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold-hi),var(--gold) 55%,var(--gold-lo));font-family:var(--serif);font-weight:800;font-size:44px;color:var(--gold-ink);box-shadow:0 0 0 6px var(--paper),0 0 0 8px var(--gold)}
+.nodata h3{font-family:var(--serif);font-weight:800;font-size:clamp(21px,3.4vw,28px);line-height:1.4;text-wrap:balance}
+.nodata>p{margin-top:12px;font-size:17px}
+.got{display:inline-flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+.got span{font-size:13px;padding:4px 12px;border-radius:999px;background:var(--paper-line);color:var(--paper-muted);font-weight:500}
+.howto{text-align:left;margin:24px auto 0;padding:18px 20px;border-radius:14px;background:#e7e9f6;max-width:440px}
+.howto h4{font-size:15px;margin-bottom:8px}
+.howto li{position:relative;padding:4px 0 4px 20px;font-size:14px}
+.howto li::before{content:"";position:absolute;left:2px;top:12px;width:9px;height:5px;border-left:2px solid var(--me);border-bottom:2px solid var(--me);transform:rotate(-45deg)}
+.nodata .free-note{margin-top:16px;font-size:13px;color:var(--paper-muted)}
+.nodata .btn{margin-top:18px}
+
+/* sim chat */
+.sim{display:grid;grid-template-columns:1fr minmax(0,400px);gap:clamp(24px,5vw,64px);align-items:center}
+.sim>*{min-width:0}
+.sim-text p{color:var(--muted);margin-top:14px}
+.rules{margin-top:22px;display:grid;gap:10px}
+.rules li{display:flex;gap:12px;align-items:flex-start;font-size:15px}
+.rules b{flex:none;min-width:84px;padding:2px 10px;border-radius:999px;text-align:center;font-size:13px;background:var(--ink3);color:var(--gold-hi)}
+.phone{background:var(--ink2);border:1px solid var(--line);border-radius:28px;padding:14px;max-width:400px;width:100%;justify-self:center}
+.chat-note{font-size:12px;color:var(--muted);text-align:center;padding:6px 10px 12px}
+.msgs{display:grid;gap:10px;padding:4px 2px 8px}
+.bub{max-width:82%;padding:10px 14px;border-radius:18px;font-size:15px;line-height:1.55}
+.bub.you{justify-self:start;background:var(--paper);color:var(--paper-ink);border-bottom-left-radius:6px}
+.bub.me{justify-self:end;background:var(--me);color:#fff;border-bottom-right-radius:6px}
+.tname{font-size:11px;color:var(--muted);margin:2px 4px -4px}
+.paywall{margin-top:8px;background:var(--ink3);border-radius:16px;padding:16px;text-align:center}
+.paywall p{font-size:14px;margin-bottom:12px}
+.used{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;margin-bottom:10px}
+.used .meter{flex:1;height:8px;border-radius:99px;background:var(--ink);overflow:hidden}
+.used .meter i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--gold),var(--gold-hi));border-radius:99px}
+.used span{font-variant-numeric:tabular-nums;color:var(--gold-hi)}
+.sim-tabs{margin-top:18px}
+
+/* privacy */
+.priv{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.priv li{background:var(--ink2);border:1px solid var(--line);border-radius:16px;padding:20px;min-width:0}
+.ico{width:40px;height:40px;border-radius:12px;background:var(--ink3);display:grid;place-items:center;margin-bottom:12px}
+.ico svg{width:22px;height:22px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.priv h3{font-size:16px;margin-bottom:4px}
+.priv p{font-size:14px;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:22px;font-size:14px}
+.flow span{padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:var(--ink2)}
+.flow i{font-style:normal;color:var(--muted)}
+
+/* pricing */
+.plans{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:860px}
+.plan{background:var(--ink2);border:1px solid var(--line);border-radius:22px;padding:26px;min-width:0}
+.plan.pro{background:var(--paper);color:var(--paper-ink);border-color:var(--gold);box-shadow:0 0 0 3px var(--gold)}
+.plan h3{font-size:18px}
+.price{font-family:var(--serif);font-weight:800;font-size:40px;line-height:1.2;margin:6px 0 14px}
+.price small{font-family:var(--body);font-size:14px;font-weight:500;margin-left:4px}
+.plan li{padding:8px 0 8px 22px;position:relative;font-size:15px}
+.plan li::before{content:"";position:absolute;left:2px;top:17px;width:10px;height:6px;border-left:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:rotate(-45deg)}
+.plan.pro li::before{border-color:var(--me)}
+.plan .btn{margin-top:18px;width:100%}
+.coffee{margin-top:16px;color:var(--muted);font-size:14px}
+
+/* faq */
+.faq{max-width:760px;display:grid;gap:10px}
+details{background:var(--ink2);border:1px solid var(--line);border-radius:14px;padding:0 18px}
+summary{cursor:pointer;list-style:none;padding:16px 0;font-weight:700;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--gold);font-size:20px;line-height:1}
+details[open] summary::after{content:"−"}
+details p{padding-bottom:16px;color:var(--muted);font-size:15px}
+
+/* final */
+.final{background:radial-gradient(120% 120% at 50% 0%,#232a66 0%,var(--ink2) 55%);border:1px solid var(--line);border-radius:28px;padding:clamp(28px,5vw,60px);text-align:center;margin-block:clamp(24px,5vw,56px)}
+.final .ic{width:70px;margin:0 auto 14px}
+.final h2{margin-bottom:10px}
+.final>p{color:var(--muted)}
+.final .btn{margin-top:24px;min-width:min(100%,320px)}
+.drop{margin:22px auto 0;max-width:520px;border:2px dashed var(--line);border-radius:18px;padding:20px 16px;background:var(--ink);opacity:.85}
+.drop strong{display:block;font-size:15px}
+.drop span{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+footer{padding-block:24px 48px;color:var(--muted);font-size:13px;display:grid;gap:6px}
+
+/* login dialog */
+dialog{background:var(--ink2);color:var(--text);border:1px solid var(--line);border-radius:26px;padding:30px 24px 22px;width:min(400px,calc(100% - 32px));text-align:center;font-family:var(--body);word-break:keep-all}
+dialog::backdrop{background:rgba(5,8,20,.72)}
+dialog .ic{width:56px;margin:0 auto 10px}
+dialog h2{font-size:24px;margin-bottom:6px}
+dialog p{color:var(--muted);font-size:14px}
+.xbtn{position:absolute;right:12px;top:12px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--text);font-size:18px;cursor:pointer;line-height:1}
+.login-list{display:grid;gap:10px;margin-top:20px}
+.login-list .btn{width:100%}
+.alt{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.alt .btn{min-height:42px;font-size:14px;padding:0 8px}
+.login-note{margin-top:16px;font-size:12px;line-height:1.6}
+#login-status{min-height:1.5em;margin-top:10px;font-size:13px;color:var(--gold)}
+
+/* ===== live demo app ===== */
+.demo-badge{display:inline-block;margin-left:8px;padding:2px 10px;border-radius:999px;background:var(--ink3);color:var(--gold-hi);font:700 11px var(--body);vertical-align:middle;letter-spacing:.02em}
+.who-chip{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 6px 0 4px;border-radius:999px;border:1px solid var(--line);background:var(--ink2);font-size:14px;font-weight:500}
+.avatar{flex:none;width:32px;height:32px;border-radius:50%;background:var(--kakao);color:var(--kakao-ink);display:grid;place-items:center;font-weight:700;font-size:14px}
+.who-chip button{border:0;background:transparent;color:var(--muted);font:500 13px var(--body);cursor:pointer;padding:6px 10px;border-radius:999px}
+.who-chip button:hover{color:var(--text)}
+
+.app-box{background:var(--ink2);border:1px solid var(--line);border-radius:26px;padding:clamp(18px,3.5vw,34px)}
+.app-box h3{font-family:var(--serif);font-weight:800;font-size:clamp(20px,3vw,26px);line-height:1.4}
+.app-box .desc{color:var(--muted);margin-top:8px;max-width:38em}
+.gate{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center}
+.gate .btn{min-width:240px}
+.app-steps{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.app-steps span{font-size:13px;padding:4px 12px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.app-steps span.on{border-color:var(--gold);color:var(--gold-hi)}
+.app-steps span.done{color:var(--text)}
+.app-steps span.done::before{content:"✓ ";color:var(--gold)}
+
+.up-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:20px;margin-top:22px}
+.dz{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:200px;border:2px dashed var(--line);border-radius:20px;padding:24px 16px;text-align:center;cursor:pointer;background:var(--ink);transition:border-color .15s,background .15s}
+.dz:hover,.dz.drag{border-color:var(--gold);background:#0e1430}
+.dz:focus-within{outline:3px solid var(--gold);outline-offset:3px}
+.dz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.dz svg{width:40px;height:40px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.dz strong{font-size:17px}
+.dz span{font-size:13px;color:var(--muted)}
+.guide{background:var(--ink);border:1px solid var(--line);border-radius:20px;padding:18px 20px}
+.guide h4{font-size:15px;margin-bottom:8px;color:var(--gold-hi)}
+.guide ol{list-style:decimal;padding-left:20px;display:grid;gap:4px;font-size:14px;color:var(--muted)}
+.guide ol b{color:var(--text);font-weight:500}
+.guide p{font-size:13px;color:var(--muted);margin-top:10px}
+.alt-input{margin-top:16px}
+.alt-input summary{padding:10px 0;font-size:14px;color:var(--muted);font-weight:500}
+.alt-input summary::after{content:"+"}
+textarea,.field{width:100%;background:var(--ink);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font:15px/1.6 var(--body)}
+textarea{min-height:150px;resize:vertical}
+textarea:focus,.field:focus{outline:2px solid var(--gold);outline-offset:1px;border-color:transparent}
+.row-btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;align-items:center}
+.msg-err{color:var(--rose);font-size:14px;margin-top:12px;min-height:1.4em}
+
+.pick{margin-top:24px;padding-top:22px;border-top:1px solid var(--line)}
+.pick h4{font-size:17px}
+.pick p{color:var(--muted);font-size:14px;margin-top:4px}
+.pick-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.pick-list label{display:flex;align-items:center;gap:10px;padding:10px 18px 10px 14px;border:1px solid var(--line);border-radius:999px;cursor:pointer;background:var(--ink);min-width:0}
+.pick-list label:has(input:checked){border-color:var(--gold);background:#1a1f45}
+.pick-list input{accent-color:var(--gold);width:18px;height:18px;margin:0}
+.pick-list b{font-weight:700}
+.pick-list small{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+.file-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.file-meta span{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--ink3);color:var(--muted)}
+
+.app-load{text-align:center}
+.app-load .sky{margin-top:4px}
+
+/* live report extras */
+.res-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:18px}
+.res-bar p{color:var(--muted);font-size:14px}
+.ai-line{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--paper-muted);margin-top:10px}
+.ai-line i{width:8px;height:8px;border-radius:50%;background:var(--amber);animation:pulse 1s ease-in-out infinite alternate}
+@keyframes pulse{from{opacity:.3}to{opacity:1}}
+.score-row{display:flex;align-items:center;gap:16px;margin-top:18px;flex-wrap:wrap}
+.score-row .ring{width:84px;height:84px}
+.score-row .ring b{font-size:26px}
+.score-row .cs-type{font-size:20px}
+.score-row .cs-quote{margin-top:6px;font-size:14px}
+.score-row>div:last-child{min-width:0;flex:1}
+.secrets{display:grid;gap:12px}
+.secrets li{background:#fff;border:1px solid var(--paper-line);border-radius:14px;padding:14px 16px}
+.secrets strong{display:block;font-size:15px;margin-bottom:4px}
+.secrets span{font-size:14px;color:var(--paper-ink)}
+.paid-box{margin-top:30px;border-radius:16px;border:2px solid var(--gold);padding:20px;background:#fffaf0}
+.paid-box h4{font-size:17px;margin-bottom:12px}
+.note-sm{font-size:12px;color:var(--paper-muted);margin-top:10px}
+.sheet .btn-ghost{border-color:var(--paper-line);color:var(--paper-ink)}
+
+/* live chat */
+.live-sim{margin-top:clamp(28px,5vw,48px)}
+.chat-scroll{max-height:420px;overflow-y:auto;padding:4px 2px 8px;display:grid;gap:10px;align-content:start}
+.chat-empty{color:var(--muted);font-size:14px;text-align:center;padding:24px 8px}
+.bub.typing{color:var(--paper-muted)}
+.composer{display:flex;gap:8px;margin-top:10px}
+.composer .field{border-radius:999px;padding:10px 16px;min-width:0;flex:1}
+.composer .btn{min-height:44px;padding:0 18px;flex:none}
+.quota{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;margin-top:12px;color:var(--muted)}
+.quota .meter{flex:1;height:6px;border-radius:99px;background:var(--ink);overflow:hidden}
+.quota .meter i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-hi));border-radius:99px}
+.quota span{font-variant-numeric:tabular-nums;color:var(--gold-hi);white-space:nowrap}
+
+/* dialogs: kakao consent + pay */
+.kk-sheet{text-align:left;margin-top:18px;background:#fff;color:#191919;border-radius:16px;padding:18px}
+.kk-sheet .kk-top{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;padding-bottom:12px;border-bottom:1px solid #eee}
+.kk-sheet .kk-top i{width:22px;height:22px;border-radius:6px;background:var(--kakao);display:grid;place-items:center}
+.kk-sheet .kk-top svg{width:14px;height:14px;fill:#191919}
+.kk-sheet label{display:block;font-size:13px;color:#555;margin:14px 0 6px}
+.kk-sheet .field{background:#f6f6f6;color:#191919;border-color:#e3e3e3}
+.kk-sheet .kk-agree{margin-top:14px;font-size:13px;color:#333;display:grid;gap:6px}
+.kk-sheet .kk-agree span::before{content:"✓ ";color:#2a8f3c;font-weight:700}
+.kk-sheet .btn{width:100%;margin-top:16px}
+.pay-amt{font-family:var(--serif);font-weight:800;font-size:38px;margin:10px 0 2px}
+.pay-items{text-align:left;margin:14px auto 0;max-width:280px;font-size:14px;display:grid;gap:4px;color:var(--muted)}
+.pay-items li::before{content:"· ";color:var(--gold)}
+.pay-go{width:100%;margin-top:18px}
+.demo-tag{display:inline-block;margin-top:12px;font-size:12px;padding:3px 10px;border-radius:999px;background:var(--ink3);color:var(--gold-hi)}
+
+@media (max-width:860px){
+  .gate,.up-grid{grid-template-columns:1fr}
+  .gate .btn{min-width:0;width:100%}
+}
+@media (prefers-reduced-motion:reduce){ .ai-line i{animation:none} }
+
+/* ===== v2: name field, chat CTA ===== */
+.name-row{margin-top:18px;max-width:420px}
+.name-row label{display:block;font-weight:700;font-size:15px;margin-bottom:8px}
+.name-row p{font-size:13px;color:var(--muted);margin-top:6px}
+.talk-cta{margin-top:clamp(24px,4vw,40px);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center;background:radial-gradient(120% 140% at 0% 0%,#232a66 0%,var(--ink) 60%);border:1px solid var(--line);border-radius:22px;padding:clamp(20px,3.5vw,32px)}
+.talk-cta-txt{min-width:0}
+.talk-cta h3{margin-top:2px}
+.talk-cta-txt>p{color:var(--muted);margin-top:8px;font-size:15px}
+.talk-cta .rules{margin-top:14px}
+.talk-cta .btn{min-width:220px}
+.talk-cta .btn[aria-disabled="true"]{opacity:.55;pointer-events:none}
+
+/* ===== paid deep report ===== */
+.deep{margin-top:32px;border-top:2px solid var(--paper-ink);padding-top:24px}
+.deep-head{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:baseline;justify-content:space-between}
+.deep-head h3{font-family:var(--serif);font-weight:800;font-size:22px}
+.deep-head span{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--gold);color:var(--gold-ink)}
+.temp{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:center;margin-top:18px;padding:18px;border-radius:16px;background:#fff;border:1px solid var(--paper-line)}
+.thermo{position:relative;width:96px;height:96px;border-radius:50%;background:conic-gradient(var(--you) calc(var(--p)*1%),var(--paper-line) 0);display:grid;place-items:center}
+.thermo::before{content:"";position:absolute;inset:9px;border-radius:50%;background:#fff}
+.thermo b{position:relative;font-family:var(--serif);font-size:28px;line-height:1;font-variant-numeric:tabular-nums}
+.thermo b small{font-size:14px}
+.temp-label{font-family:var(--serif);font-weight:800;font-size:19px}
+.temp p{font-size:15px;margin-top:4px}
+.deep-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(20px,3.5vw,40px);margin-top:26px}
+.deep-grid>*{min-width:0}
+.moments{display:grid;gap:12px}
+.moments li{position:relative;padding:12px 14px 12px 16px;border-radius:12px;background:#fff;border:1px solid var(--paper-line);border-left:4px solid var(--you)}
+.moments li.cool{border-left-color:var(--paper-muted)}
+.moments time{font-size:12px;font-weight:700;color:var(--paper-muted);font-variant-numeric:tabular-nums}
+.moments q{display:block;quotes:none;margin:4px 0;font-weight:700;font-size:15px}
+.moments q.mine{font-weight:500;color:var(--paper-muted);font-size:13px}
+.moments q::before{content:"“"}.moments q::after{content:"”"}
+.moments p{font-size:14px;color:var(--paper-ink)}
+.ev li{padding:10px 0;border-bottom:1px dashed var(--paper-line)}
+.ev li:first-child{padding-top:0}
+.ev strong{display:block;font-size:15px}
+.ev span{display:block;font-size:14px;color:var(--paper-muted);margin-top:2px}
+.mgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.mcell{background:#fff;border:1px solid var(--paper-line);border-radius:12px;padding:12px}
+.mcell b{display:block;font-family:var(--serif);font-weight:800;font-size:22px;line-height:1.2;font-variant-numeric:tabular-nums}
+.mcell span{display:block;font-size:12px;color:var(--paper-muted);line-height:1.4;margin-top:4px}
+.trend{display:flex;align-items:flex-end;gap:6px;height:120px;border-bottom:2px solid var(--paper-ink);padding-top:16px}
+.trend div{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;height:100%;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+.trend i{display:block;width:min(22px,80%);border-radius:5px 5px 0 0;background:var(--you)}
+.trend-l{display:flex;gap:6px;margin-top:4px}
+.trend-l span{flex:1;min-width:0;text-align:center;font-size:11px;color:var(--paper-muted);white-space:nowrap;overflow:hidden}
+.trend-tag{display:inline-block;margin-top:10px;font-size:13px;font-weight:700;padding:3px 12px;border-radius:999px;background:#e3e6f6}
+.prose p{font-size:15px}
+.prose p+p{margin-top:8px}
+.sends{display:grid;gap:10px}
+.sends li{background:#fff;border:1px solid var(--paper-line);border-radius:14px;padding:12px 14px}
+.sends .say{display:inline-block;background:var(--kakao);color:var(--kakao-ink);padding:8px 12px;border-radius:14px 4px 14px 14px;font-size:15px;font-weight:500;max-width:100%}
+.sends p{font-size:13px;color:var(--paper-muted);margin-top:8px}
+.sends .row-btns{margin-top:8px}
+.sends .btn{min-height:34px;padding:0 12px;font-size:13px}
+.donts li{padding:10px 0;border-bottom:1px dashed var(--paper-line);font-size:14px}
+.donts li:first-child{padding-top:0}
+.donts strong{display:block;font-size:15px;color:#b23048}
+.next{margin-top:26px;padding:18px 20px;border-radius:16px;background:var(--paper-ink);color:var(--paper)}
+.next h4{color:var(--gold-hi);font-size:15px;margin-bottom:6px}
+.next p{font-size:15px}
+.dict{display:flex;flex-wrap:wrap;gap:8px}
+.dict li{padding:6px 12px;border-radius:999px;background:#fff;border:1px solid var(--paper-line);font-size:14px}
+.dict li b{font-weight:700}
+.dict li small{color:var(--paper-muted);font-size:12px;margin-left:4px}
+.lock-list{display:grid;gap:6px;margin:0 auto;text-align:left;font-size:14px;max-width:320px}
+.lock-list li::before{content:"✓ ";color:var(--me);font-weight:700}
+
+/* ===== talk page: KakaoTalk-style room ===== */
+body.talking{overflow:hidden}
+body.talking>.wrap{display:none}
+#talk{--tk-bg:#bacee0;--tk-ink:#191919;--tk-meta:#55636f;--tk-me:#fee500;--tk-you:#ffffff;--tk-bar:#ffffff;--tk-line:#e4e4e4;--tk-unread:#e8b800;
+  position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;background:var(--tk-bg);color:var(--tk-ink);font-family:var(--body);line-height:1.45;color-scheme:light}
+#talk[hidden]{display:none!important}
+.tk-head{flex:none;display:flex;align-items:center;gap:4px;padding:calc(8px + env(safe-area-inset-top,0px)) max(8px,env(safe-area-inset-right,0px)) 8px max(8px,env(safe-area-inset-left,0px));background:var(--tk-bg)}
+.tk-title{flex:1;min-width:0;display:flex;flex-direction:column;padding-left:2px}
+.tk-head h1{font:700 17px/1.3 var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tk-title span{font-size:11px;color:var(--tk-meta)}
+.tk-icon{flex:none;width:42px;height:42px;border:0;background:transparent;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--tk-ink)}
+.tk-icon:hover{background:rgba(0,0,0,.06)}
+.tk-icon svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tk-icon:focus-visible,.tk-send:focus-visible{outline:3px solid #3c5a78;outline-offset:2px}
+.tk-quota{flex:none;margin:0 max(12px,env(safe-area-inset-right,0px)) 4px max(12px,env(safe-area-inset-left,0px));padding:7px 12px;border-radius:10px;background:rgba(255,255,255,.55);font-size:12px;color:#38444f;display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap}
+.tk-quota b{color:var(--tk-ink)}
+.tk-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:6px max(10px,env(safe-area-inset-right,0px)) 14px max(10px,env(safe-area-inset-left,0px))}
+.tk-inner{max-width:760px;margin:0 auto;display:flex;flex-direction:column}
+.tk-pill{align-self:center;margin:14px 0 8px;padding:4px 14px;border-radius:999px;background:rgba(43,62,82,.28);color:#fff;font-size:12px;text-align:center;max-width:92%}
+.tk-pill.sys{background:rgba(255,255,255,.6);color:#38444f}
+.tk-past{opacity:.62}
+.tk-row{display:flex;align-items:flex-end;gap:6px;margin-top:3px;max-width:100%}
+.tk-row.me{justify-content:flex-end}
+.tk-row.first{margin-top:10px}
+.tk-av{flex:none;width:40px;height:40px;border-radius:15px;background:#9fb4c8;color:#fff;display:grid;place-items:center;font-weight:700;font-size:16px;align-self:flex-start}
+.tk-av.blank{visibility:hidden;height:0}
+.tk-col{min-width:0;display:flex;flex-direction:column;align-items:flex-start;max-width:min(72%,460px)}
+.tk-row.me .tk-col{align-items:flex-end}
+.tk-nm{font-size:12px;color:#3d4954;margin:0 0 4px 2px}
+.tk-line{display:flex;align-items:flex-end;gap:5px;max-width:100%}
+.tk-row.me .tk-line{flex-direction:row-reverse}
+.tk-b{position:relative;padding:8px 11px;border-radius:14px;font-size:15px;white-space:pre-wrap;overflow-wrap:anywhere;word-break:keep-all;min-width:0;background:var(--tk-you)}
+.tk-row.me .tk-b{background:var(--tk-me)}
+.tk-row.first .tk-b::before{content:"";position:absolute;top:6px;width:10px;height:10px;background:inherit}
+.tk-row.first:not(.me) .tk-b::before{left:-5px;clip-path:polygon(100% 0,0 0,100% 100%)}
+.tk-row.first.me .tk-b::before{right:-5px;clip-path:polygon(0 0,100% 0,0 100%)}
+.tk-b.emo{background:transparent!important;padding:0}
+.tk-b.emo::before{display:none}
+.tk-emo{display:grid;place-items:center;width:96px;height:96px;border-radius:20px;background:rgba(255,255,255,.55);font-size:12px;color:#55636f}
+.tk-emo svg{width:56px;height:56px}
+.tk-meta{flex:none;display:flex;flex-direction:column;align-items:flex-end;font-size:10.5px;color:var(--tk-meta);line-height:1.25;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tk-row:not(.me) .tk-meta{align-items:flex-start}
+.tk-meta .u{color:var(--tk-unread);font-weight:700;font-size:11px}
+.tk-err{align-self:center;margin:8px 0;padding:6px 14px;border-radius:12px;background:#fff3f4;color:#b23048;font-size:13px;text-align:center;max-width:92%}
+.tk-bar{flex:none;display:flex;align-items:flex-end;gap:8px;background:var(--tk-bar);padding:8px max(10px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px));border-top:1px solid var(--tk-line)}
+.tk-bar textarea{flex:1;min-width:0;border:0;resize:none;background:#f3f3f3;color:var(--tk-ink);border-radius:20px;padding:9px 14px;font:15px/1.45 var(--body);max-height:120px}
+.tk-bar textarea:focus{outline:2px solid #c9d6e2}
+.tk-send{flex:none;height:40px;padding:0 16px;border:0;border-radius:20px;background:var(--tk-me);color:var(--tk-ink);font:700 14px var(--body);cursor:pointer}
+.tk-send:disabled{background:#ececec;color:#a3a3a3;cursor:default}
+.tk-wall{flex:none;background:#fff;color:var(--tk-ink);padding:18px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));border-top:1px solid var(--tk-line);text-align:center;box-shadow:0 -10px 30px rgba(0,0,0,.08)}
+.tk-wall p{font-size:15px;margin-bottom:12px}
+.tk-wall .btn{width:min(100%,320px)}
+.tk-empty{position:absolute;inset:0;top:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:24px;background:var(--tk-bg)}
+.tk-empty .ic{width:64px}
+.tk-empty h2{font-family:var(--serif);font-size:22px}
+.tk-empty p{max-width:24em;color:#38444f}
+#tk-menu .tk-menu-form{display:grid;gap:10px;text-align:left;margin-top:16px}
+#tk-menu label{font-size:14px;font-weight:700}
+.tk-menu-list{display:grid;gap:10px;margin-top:16px}
+.tk-menu-list .btn{width:100%}
+
+@media (max-width:860px){
+  .talk-cta{grid-template-columns:1fr}
+  .talk-cta .btn{width:100%;min-width:0}
+  .deep-grid{grid-template-columns:1fr}
+}
+@media (max-width:480px){
+  .mgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .temp{grid-template-columns:1fr;justify-items:start}
+  .tk-col{max-width:78%}
+}
+
+/* ===== v3: MBTI + Kabi feedback ===== */
+.mbti-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px;max-width:420px}
+.mbti-row label{display:block;font-weight:700;font-size:15px;margin-bottom:8px}
+.mbti-row small{font-weight:500;color:var(--muted);font-size:12px;margin-left:4px}
+.mbti-row p{grid-column:1/-1;font-size:13px;color:var(--muted)}
+select.field{appearance:auto;min-height:46px;cursor:pointer}
+.mbti-note{margin-top:14px;padding:14px 16px;border-radius:14px;background:#e7e9f6}
+.mbti-note b{display:inline-block;margin-right:8px;padding:1px 10px;border-radius:999px;background:var(--paper-ink);color:var(--paper);font-size:12px;letter-spacing:.04em}
+.mbti-note p{font-size:14px;margin-top:6px}
+#tk-menu select.field{background:var(--ink);color:var(--text)}
+.tk-check{display:flex!important;align-items:center;gap:8px;font-weight:500!important;cursor:pointer}
+.tk-check input{width:18px;height:18px;accent-color:var(--gold);margin:0}
+.tk-kabi{align-self:flex-start;margin:8px 0 4px 46px;max-width:min(86%,520px);background:#141b3d;color:#eef0fa;border-radius:16px;padding:12px 14px 12px;box-shadow:0 6px 18px rgba(20,27,61,.18)}
+.tk-kabi-h{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#fbe7ae;margin-bottom:4px}
+.tk-kabi-h svg{width:20px;height:20px}
+.tk-kabi p{font-size:14px;line-height:1.55}
+.tk-kabi .sug{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.14)}
+.tk-kabi .sug span{display:block;font-size:12px;color:#a4acd2;margin-bottom:6px}
+.tk-kabi .sug button{display:block;max-width:100%;text-align:left;border:0;cursor:pointer;background:#fee500;color:#191919;font:500 14px/1.45 var(--body);padding:7px 12px;border-radius:14px 4px 14px 14px}
+.tk-kabi .sug button:focus-visible{outline:3px solid #fbe7ae;outline-offset:2px}
+@media (max-width:480px){.tk-kabi{margin-left:0;max-width:100%}}
+.tk-bar textarea{min-height:0;height:40px}
+/* ===== production additions ===== */
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;max-width:min(92vw,440px);padding:12px 18px;border-radius:14px;background:var(--paper);color:var(--paper-ink);font-size:14px;font-weight:500;box-shadow:0 12px 30px rgba(0,0,0,.4);text-align:center}
+.pay-err{min-height:1.4em;margin-top:10px;font-size:13px;color:var(--rose)}
+.pay-note{margin-top:8px;font-size:12px;line-height:1.6;color:var(--muted)}
+.pay-note a,.login-note a{color:var(--gold-hi)}
+footer a{color:var(--muted)}
+footer .biz{line-height:1.8}
+footer .links{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+footer .links button{border:0;background:none;color:var(--muted);font:inherit;text-decoration:underline;cursor:pointer;padding:0}
+
+@media (max-width:860px){
+  .hero,.sim,.sheet-grid{grid-template-columns:1fr}
+  .steps,.plans,.worries{grid-template-columns:1fr}
+  .priv{grid-template-columns:repeat(2,1fr)}
+  .stage{max-width:330px;margin-bottom:12px}
+  .card-score{position:relative;left:auto;bottom:auto;width:84%;margin:-28px 0 0 -4%;transform:rotate(-2deg)}
+}
+@media (max-width:480px){
+  .priv{grid-template-columns:1fr}
+  .cta-row .btn{width:100%}
+  .top .btn{width:auto}
+  .kw li{grid-template-columns:minmax(0,76px) minmax(0,1fr) 36px}
+  .sigs li{grid-template-columns:24px minmax(0,1fr)}
+  .sigs em{grid-column:2;white-space:normal;margin-top:-6px}
+  .rules b{min-width:76px}
+}
+@media (prefers-reduced-motion:reduce){
+  .flyer{animation:none;left:calc(50% - 125px)}
+  .flyer svg,.w,.load-bar i{animation:none}
+  .load-bar i{width:60%}
+}
+</style>
+</head>
+<body>
+
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="gGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbe7ae"/><stop offset=".5" stop-color="#e2b04e"/><stop offset="1" stop-color="#a8742a"/></linearGradient>
+    <linearGradient id="gSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c2260"/><stop offset=".55" stop-color="#2b2570"/><stop offset="1" stop-color="#0c102e"/></linearGradient>
+    <linearGradient id="gFeather" gradientUnits="userSpaceOnUse" x1="60" y1="50" x2="150" y2="240"><stop offset="0" stop-color="#7378dc"/><stop offset=".25" stop-color="#3f4499"/><stop offset=".6" stop-color="#1e2257"/><stop offset="1" stop-color="#0d1032"/></linearGradient>
+    <linearGradient id="gWing" gradientUnits="userSpaceOnUse" x1="50" y1="110" x2="140" y2="232"><stop offset="0" stop-color="#6469c9"/><stop offset=".45" stop-color="#2a2f72"/><stop offset="1" stop-color="#11143a"/></linearGradient>
+    <linearGradient id="gBeak" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffeab0"/><stop offset=".55" stop-color="#e0a93f"/><stop offset="1" stop-color="#9a6a22"/></linearGradient>
+    <linearGradient id="gFly" gradientUnits="userSpaceOnUse" x1="40" y1="30" x2="150" y2="95"><stop offset="0" stop-color="#7378dc"/><stop offset=".4" stop-color="#3a3f94"/><stop offset="1" stop-color="#171a48"/></linearGradient>
+    <linearGradient id="gFlyFar" gradientUnits="userSpaceOnUse" x1="40" y1="0" x2="110" y2="70"><stop offset="0" stop-color="#4a4fac"/><stop offset="1" stop-color="#1a1d50"/></linearGradient>
+    <linearGradient id="gPaper" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffaf0"/><stop offset="1" stop-color="#ecdfbf"/></linearGradient>
+    <radialGradient id="gMoon" cx=".38" cy=".34" r=".85"><stop offset="0" stop-color="#fff6dc"/><stop offset=".55" stop-color="#f1dca2"/><stop offset="1" stop-color="#cda85f"/></radialGradient>
+    <radialGradient id="gGlow"><stop offset="0" stop-color="#ffe196" stop-opacity=".55"/><stop offset="1" stop-color="#ffe196" stop-opacity="0"/></radialGradient>
+    <symbol id="spark" viewBox="-8 -8 16 16"><path d="M0-8 L2-2 L8 0 L2 2 L0 8 L-2 2 L-8 0 L-2-2Z" fill="url(#gGold)"/></symbol>
+    <symbol id="mark" viewBox="0 0 48 48">
+      <path d="M31 4 A20 20 0 1 0 44 31 A15 15 0 0 1 31 4Z" fill="url(#gGold)"/>
+      <circle cx="22" cy="27" r="9.5" fill="#5a5fc4"/>
+      <path d="M30 24.5 L42 29 L30 32.5Z" fill="#fbe7ae"/>
+      <circle cx="25.5" cy="24.5" r="2.4" fill="#0d1032"/><circle cx="26.2" cy="23.8" r=".8" fill="#fff"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+
+  <header class="top">
+    <a class="brand" href="#top" id="top"><svg class="ic" viewBox="0 0 48 48" aria-hidden="true"><use href="#mark"/></svg>속까마귀</a>
+    <button class="btn btn-kakao btn-sm" type="button" data-login>카카오로 시작</button>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <span class="pill">썸 · 짝사랑 · 애매한 사이</span>
+      <h1>그 사람도<br><em>나랑 같은 마음</em>일까?</h1>
+      <p class="lead">답장 속도, 질문, 말투에는 말로 안 한 마음이 남아 있어요. 카톡 대화를 올리면 까비가 쌍방 신호를 읽어 드려요.</p>
+      <div class="cta-row">
+        <button class="btn btn-kakao" type="button" data-login>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.8 1.8 5.3 4.6 6.7l-1 3.6c-.1.3.2.5.5.4l4.3-2.8c.5.1 1.1.1 1.6.1 5.5 0 10-3.6 10-8S17.5 3 12 3z"/></svg>
+          카카오로 3초 만에 시작
+        </button>
+        <a class="btn btn-ghost" href="#report">샘플 리포트 보기</a>
+      </div>
+      <p class="fine">쌍방 신호 요약은 무료예요. 재미로 보는 대화 패턴 분석이에요.</p>
+    </div>
+
+    <div class="stage">
+      <svg class="tarot" viewBox="0 0 360 520" role="img" aria-label="달빛 아래 편지를 바라보는 까마귀가 그려진 타로 카드 일러스트">
+        <rect x="4" y="4" width="352" height="512" rx="22" fill="url(#gSky)" stroke="url(#gGold)" stroke-width="3"/>
+        <rect x="16" y="16" width="328" height="488" rx="14" fill="none" stroke="url(#gGold)" stroke-width="1.2" opacity=".85"/>
+        <g fill="url(#gGold)">
+          <path d="M30 22 l6 8 -6 8 -6 -8z"/><path d="M330 22 l6 8 -6 8 -6 -8z"/>
+          <path d="M30 482 l6 8 -6 8 -6 -8z"/><path d="M330 482 l6 8 -6 8 -6 -8z"/>
+        </g>
+        <text class="t-top" x="180" y="52" text-anchor="middle">THE MESSENGER</text>
+        <path d="M140 62 H220" stroke="url(#gGold)" stroke-width="1" opacity=".8"/>
+
+        <!-- moon -->
+        <circle cx="250" cy="150" r="108" fill="url(#gGlow)"/>
+        <circle cx="250" cy="150" r="56" fill="url(#gMoon)"/>
+        <circle cx="232" cy="136" r="9" fill="#c9a45a" opacity=".28"/><circle cx="268" cy="168" r="12" fill="#c9a45a" opacity=".24"/><circle cx="262" cy="124" r="5" fill="#c9a45a" opacity=".3"/>
+
+        <!-- stars -->
+        <use href="#spark" x="50" y="96" width="16" height="16"/>
+        <use href="#spark" x="122" y="78" width="10" height="10"/>
+        <use href="#spark" x="318" y="84" width="12" height="12"/>
+        <use href="#spark" x="40" y="262" width="9" height="9"/>
+        <use href="#spark" x="324" y="270" width="14" height="14"/>
+        <use href="#spark" x="176" y="118" width="8" height="8"/>
+        <circle cx="96" cy="130" r="1.6" fill="#dfe4ff"/><circle cx="196" cy="86" r="1.4" fill="#dfe4ff"/><circle cx="332" cy="196" r="1.6" fill="#dfe4ff"/><circle cx="64" cy="204" r="1.4" fill="#dfe4ff"/><circle cx="158" cy="170" r="1.2" fill="#dfe4ff"/>
+
+        <!-- mist -->
+        <ellipse cx="90" cy="430" rx="130" ry="26" fill="#6d73d8" opacity=".12"/>
+        <ellipse cx="290" cy="440" rx="120" ry="22" fill="#6d73d8" opacity=".1"/>
+
+        <!-- floating letter -->
+        <g transform="translate(40 172) rotate(-12)">
+          <ellipse cx="38" cy="26" rx="62" ry="46" fill="url(#gGlow)"/>
+          <rect x="0" y="0" width="76" height="52" rx="5" fill="url(#gPaper)" stroke="#cdbf9a" stroke-width="1"/>
+          <path d="M1 2 L38 30 L75 2" fill="none" stroke="#cdbf9a" stroke-width="1.4"/>
+          <circle cx="38" cy="30" r="10.5" fill="#f0576b"/>
+          <path d="M38 36 C29 29 31 22 38 27 C45 22 47 29 38 36Z" fill="#fff"/>
+        </g>
+
+        <!-- crow -->
+        <g transform="translate(70 178)">
+          <path d="M-30 246 C50 236 140 252 262 231" fill="none" stroke="#2a2147" stroke-width="11" stroke-linecap="round"/>
+          <path d="M-30 243 C50 233 140 249 262 228" fill="none" stroke="#6b5aa0" stroke-width="1.6" stroke-linecap="round" opacity=".6"/>
+          <!-- tail -->
+          <path d="M52 188 C28 214 4 238 -22 266 L8 258 L-4 290 L34 252 L30 280 L70 222Z" fill="url(#gFeather)"/>
+          <path d="M40 214 C26 232 12 248 -4 268" fill="none" stroke="#8c93ee" stroke-width="1.2" opacity=".35"/>
+          <!-- body + head -->
+          <path d="M40 120 C24 160 34 205 74 222 C110 232 150 218 160 178 C168 146 158 118 134 104 C104 88 56 92 40 120Z" fill="url(#gFeather)"/>
+          <circle cx="140" cy="78" r="36" fill="url(#gFeather)"/>
+          <path d="M112 100 C124 112 150 112 168 100 C160 116 138 124 116 114Z" fill="url(#gFeather)"/>
+          <!-- sheen on head & chest -->
+          <path d="M118 56 C130 44 152 42 166 52" fill="none" stroke="#b9bfff" stroke-width="2.2" stroke-linecap="round" opacity=".5"/>
+          <path d="M156 126 C164 144 160 168 148 184" fill="none" stroke="#b9bfff" stroke-width="2" stroke-linecap="round" opacity=".28"/>
+          <!-- wing -->
+          <path d="M52 128 C44 168 58 206 92 222 C122 228 150 212 158 184 C140 176 112 150 92 124 C78 112 64 114 52 128Z" fill="url(#gWing)"/>
+          <path d="M66 150 C84 176 102 196 124 210" fill="none" stroke="#9aa2ff" stroke-width="1.5" opacity=".35"/>
+          <path d="M80 140 C100 164 118 182 142 194" fill="none" stroke="#9aa2ff" stroke-width="1.5" opacity=".35"/>
+          <path d="M94 130 C112 150 130 166 152 176" fill="none" stroke="#9aa2ff" stroke-width="1.5" opacity=".35"/>
+          <path d="M60 132 C70 120 90 118 104 126" fill="none" stroke="#c4c9ff" stroke-width="2" stroke-linecap="round" opacity=".55"/>
+          <!-- beak -->
+          <path d="M168 62 C200 58 224 72 234 94 C214 88 192 92 170 96Z" fill="url(#gBeak)"/>
+          <path d="M170 94 C192 96 210 100 222 108 C204 110 184 108 170 102Z" fill="#b7802c"/>
+          <path d="M184 72 q6 -1 10 3" fill="none" stroke="#8a5d1c" stroke-width="1.4" stroke-linecap="round"/>
+          <!-- eye -->
+          <circle cx="152" cy="70" r="9" fill="#0a0d20" stroke="url(#gGold)" stroke-width="2.6"/>
+          <circle cx="153" cy="70" r="3.6" fill="#05060f"/>
+          <circle cx="150" cy="67" r="2" fill="#fff"/>
+          <!-- locket -->
+          <path d="M116 108 Q140 140 168 108" fill="none" stroke="url(#gGold)" stroke-width="1.6"/>
+          <path d="M142 144 C132 136 134 126 142 132 C150 126 152 136 142 144Z" fill="url(#gGold)" stroke="#a8742a" stroke-width=".6"/>
+          <!-- feet -->
+          <path d="M90 226 V240 M112 228 V240" stroke="#3a3260" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M84 242 h12 M106 242 h12" stroke="#3a3260" stroke-width="3.5" stroke-linecap="round"/>
+        </g>
+
+        <!-- name plate -->
+        <rect x="70" y="452" width="220" height="40" rx="20" fill="#0c102e" stroke="url(#gGold)" stroke-width="1.6"/>
+        <text class="t-name" x="180" y="480" text-anchor="middle">속까마귀</text>
+      </svg>
+
+      <article class="card-score" aria-label="결과 카드 예시">
+        <span class="cs-tag">예시</span>
+        <div class="cs-row">
+          <div class="ring" style="--p:72" role="img" aria-label="쌍방 신호 72점"><b>72</b></div>
+          <div><div class="cs-lab">쌍방 신호</div><div class="cs-type">밀당 장인형</div></div>
+        </div>
+        <p class="cs-quote">“먼저 안 보내는데, 네 얘기엔 꼭 질문이 붙어.”</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- LIVE DEMO APP -->
+  <section class="sec" id="app" aria-labelledby="app-h">
+    <div class="sec-head">
+      <p class="kicker">지금 바로 해보기</p>
+      <h2 id="app-h">내 카톡 대화로 직접 확인해 보세요</h2>
+      <p>대화 파일은 이 브라우저 안에서 읽고, 전화번호·계좌·주소 같은 개인정보를 가린 뒤에만 까비에게 보내요.</p>
+    </div>
+
+    <div class="app-box">
+      <div class="app-steps" id="app-steps" aria-label="진행 단계">
+        <span data-step="1">카카오 로그인</span><span data-step="2">대화 올리기</span><span data-step="3">리포트</span><span data-step="4">그 사람 AI와 채팅</span>
+      </div>
+
+      <!-- 1. guest -->
+      <div id="st-guest">
+        <div class="gate">
+          <div>
+            <h3>먼저 카카오로 로그인해 주세요</h3>
+            <p class="desc">로그인하면 대화 파일을 올릴 수 있어요. 리포트와 채팅 횟수가 내 계정에 저장돼요.</p>
+          </div>
+          <button class="btn btn-kakao" type="button" data-login>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.8 1.8 5.3 4.6 6.7l-1 3.6c-.1.3.2.5.5.4l4.3-2.8c.5.1 1.1.1 1.6.1 5.5 0 10-3.6 10-8S17.5 3 12 3z"/></svg>
+            카카오로 3초 만에 시작
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. upload -->
+      <div id="st-upload" hidden>
+        <h3><span id="hello-nick">까비친구</span>님, 그 사람과의 대화를 올려 주세요</h3>
+        <div class="up-grid">
+          <div>
+            <label class="dz" id="dz">
+              <input type="file" id="file-in" accept=".txt,.csv,text/plain,text/csv" aria-label="카카오톡 대화 파일 선택">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg>
+              <strong>대화 파일을 끌어다 놓거나 눌러서 선택</strong>
+              <span>카카오톡에서 내보낸 .txt 또는 .csv 파일</span>
+            </label>
+            <details class="alt-input">
+              <summary>파일 대신 대화 내용을 붙여넣기</summary>
+              <textarea id="paste-in" placeholder="카카오톡 대화 내보내기 내용을 그대로 붙여넣어 주세요"></textarea>
+              <div class="row-btns"><button class="btn btn-ghost btn-sm" type="button" id="paste-go">붙여넣은 대화 읽기</button></div>
+            </details>
+          </div>
+          <div class="guide">
+            <h4>대화 내보내는 방법</h4>
+            <ol>
+              <li><b>모바일</b>: 채팅방 ≡ 메뉴 → 설정(톱니) → 대화 내용 내보내기 → 텍스트만 보내기</li>
+              <li><b>PC</b>: 채팅방 ≡ 메뉴 → 대화 내용 → 대화 내보내기</li>
+              <li>저장된 파일을 왼쪽에 올리면 끝이에요</li>
+            </ol>
+            <p>파일이 없다면 예시 대화로 먼저 체험해 볼 수 있어요.</p>
+            <div class="row-btns"><button class="btn btn-ghost btn-sm" type="button" id="sample-go">예시 대화로 체험하기</button></div>
+          </div>
+        </div>
+        <p class="msg-err" id="up-err" role="alert"></p>
+        <p class="resume" id="resume-talk" hidden>이전에 익힌 <b class="js-yname">상대</b>와의 채팅방이 있어요. <a href="#talk">이어서 카톡하기</a></p>
+
+        <div class="pick" id="pick" hidden>
+          <h4>이 중에 누가 나인가요?</h4>
+          <p>메시지가 가장 많은 두 사람을 골랐어요. 나를 고르면 다른 한 명이 '상대'가 돼요.</p>
+          <div class="file-meta" id="file-meta"></div>
+          <div class="pick-list" id="pick-list" role="radiogroup" aria-label="나 선택"></div>
+          <div class="name-row">
+            <label for="you-name">채팅방에 보일 상대 이름</label>
+            <input class="field" id="you-name" maxlength="16" placeholder="예: 도윤 오빠">
+            <p>AI 채팅창 맨 위와 말풍선 옆에 이 이름으로 보여요. 평소 카톡에 저장한 이름으로 바꿔 보세요.</p>
+          </div>
+          <div class="mbti-row">
+            <div><label for="you-mbti">상대 MBTI <small>선택</small></label><select class="field js-mbti" id="you-mbti"></select></div>
+            <div><label for="me-mbti">내 MBTI <small>선택</small></label><select class="field js-mbti" id="me-mbti"></select></div>
+            <p>MBTI를 알면 까비가 해석과 채팅에 참고해요. 실제 대화 패턴과 다르면 대화를 더 믿어요.</p>
+          </div>
+          <div class="row-btns"><button class="btn btn-gold" type="button" id="analyze-go">쌍방 신호 분석하기</button></div>
+        </div>
+      </div>
+
+      <!-- 3. loading -->
+      <div id="st-loading" class="app-load" hidden>
+        <div class="sky" role="img" aria-label="까비가 리포트를 물고 날아오는 로딩 화면">
+          <span class="moon-s"></span>
+          <span class="star" style="left:6%;top:18%"></span><span class="star" style="left:21%;top:62%"></span><span class="star" style="left:38%;top:14%"></span>
+          <span class="star" style="left:55%;top:72%"></span><span class="star" style="left:70%;top:34%"></span><span class="star" style="left:86%;top:68%"></span>
+          <div class="flyer">
+            <svg viewBox="0 0 240 130" aria-hidden="true">
+              <path d="M62 70 L6 80 L14 68 L2 58 L62 62Z" fill="url(#gFly)"/>
+              <path class="w" d="M108 56 C104 30 78 8 36 0 C56 14 66 30 72 60Z" fill="url(#gFlyFar)"/>
+              <ellipse cx="100" cy="66" rx="48" ry="21" transform="rotate(-6 100 66)" fill="url(#gFly)"/>
+              <circle cx="152" cy="56" r="18" fill="url(#gFly)"/>
+              <g transform="translate(186 62) rotate(10)">
+                <ellipse cx="22" cy="14" rx="34" ry="26" fill="url(#gGlow)"/>
+                <rect x="0" y="0" width="44" height="30" rx="3" fill="url(#gPaper)" stroke="#cdbf9a"/>
+                <path d="M1 1 L22 17 L43 1" fill="none" stroke="#cdbf9a" stroke-width="1.2"/>
+                <circle cx="22" cy="17" r="6.5" fill="#f0576b"/>
+                <path d="M22 21 C16.5 17 17.5 12.5 22 15.5 C26.5 12.5 27.5 17 22 21Z" fill="#fff"/>
+              </g>
+              <path d="M166 50 L198 60 L166 68Z" fill="url(#gBeak)"/>
+              <circle cx="158" cy="51" r="5" fill="#0a0d20" stroke="url(#gGold)" stroke-width="1.6"/>
+              <circle cx="157" cy="50" r="1.2" fill="#fff"/>
+              <path class="w" d="M104 58 C98 28 66 6 20 -2 C46 12 58 32 66 66Z" fill="url(#gFly)"/>
+            </svg>
+          </div>
+        </div>
+        <p class="load-msg" id="load-msg" role="status">속까마귀가 현재 리포트를 물고 당신에게 날아가고 있습니다...</p>
+        <div class="load-bar" aria-hidden="true"><i></i></div>
+      </div>
+
+      <!-- 4. result -->
+      <div id="st-result" hidden>
+        <div class="res-bar">
+          <p id="res-meta"></p>
+          <div class="row-btns" style="margin:0">
+            <button class="btn btn-ghost btn-sm" type="button" id="again-go">다른 대화 올리기</button>
+            <button class="btn btn-ghost btn-sm" type="button" id="wipe-go">내 데이터 지우기</button>
+          </div>
+        </div>
+        <div id="report-out"></div>
+
+        <div class="talk-cta" id="talk-cta" hidden>
+          <div class="talk-cta-txt">
+            <p class="kicker">그 사람 AI와 카톡하기</p>
+            <h3><span class="js-yname">상대</span>에게 보내기 전에, 먼저 말 걸어 보세요</h3>
+            <p id="persona-status">올린 대화에서 말투와 둘만 아는 이야기를 익히는 중이에요…</p>
+            <ul class="rules">
+              <li><b>처음 3번</b><span>무료로 대화해 볼 수 있어요.</span></li>
+              <li><b>결제 후</b><span>2,900원으로 하루 15번까지 이어서 대화해요.</span></li>
+            </ul>
+          </div>
+          <a class="btn btn-kakao" href="#talk" id="talk-go">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.8 1.8 5.3 4.6 6.7l-1 3.6c-.1.3.2.5.5.4l4.3-2.8c.5.1 1.1.1 1.6.1 5.5 0 10-3.6 10-8S17.5 3 12 3z"/></svg>
+            <span><span class="js-yname">상대</span>와 채팅 시작</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORRIES -->
+  <section class="sec" aria-labelledby="w-h">
+    <div class="sec-head">
+      <p class="kicker">혹시 이런 생각 해봤어요?</p>
+      <h2 id="w-h">답장 하나에 하루가 흔들릴 때가 있잖아요</h2>
+    </div>
+    <ul class="worries">
+      <li>“답장은 느린데, 질문은 꼭 먼저 해요. 이거 뭐지?”</li>
+      <li>“밤에만 말이 길어져요. 나한테만 그런 걸까?”</li>
+      <li>“이모티콘은 다정한데, 약속은 안 잡아요.”</li>
+      <li>“나만 좋아하는 거라면, 지금이라도 알고 싶어요.”</li>
+    </ul>
+    <p class="worry-end">말로는 안 했어도 대화에는 <b>마음이 남아요</b>. 그 사람의 답장 속도와 질문, 말투를 까비가 대신 읽어 드릴게요.</p>
+  </section>
+
+  <!-- HOW -->
+  <section class="sec" aria-labelledby="how-h">
+    <div class="sec-head">
+      <p class="kicker">이용 방법</p>
+      <h2 id="how-h">카카오 로그인으로 3초, 리포트까지 1분</h2>
+    </div>
+    <ol class="steps">
+      <li><span class="step-n">1</span><h3>카카오로 3초 시작</h3><p>회원가입은 카카오 로그인 한 번이면 끝나요. 리포트와 결제 내역이 내 계정에 안전하게 보관돼요.</p></li>
+      <li><span class="step-n">2</span><h3>대화 내보내서 올리기</h3><p>채팅방 메뉴에서 대화 내보내기를 눌러 파일을 올려요. 전화번호와 주소는 내 기기에서 먼저 가려져요.</p></li>
+      <li><span class="step-n">3</span><h3>쌍방 신호 확인</h3><p>그 사람과 나의 답장 속도, 질문, 말투를 비교한 리포트를 무료로 받아요.</p></li>
+    </ol>
+  </section>
+
+  <!-- LOADING -->
+  <section class="sec" aria-labelledby="load-h">
+    <div class="sec-head">
+      <p class="kicker">분석 중 화면</p>
+      <h2 id="load-h">리포트는 까비가 물고 날아와요</h2>
+    </div>
+    <div class="sky" role="img" aria-label="까비가 리포트를 물고 날아오는 로딩 화면">
+      <span class="moon-s"></span>
+      <span class="star" style="left:6%;top:18%"></span><span class="star" style="left:21%;top:62%"></span><span class="star" style="left:38%;top:14%"></span>
+      <span class="star" style="left:55%;top:72%"></span><span class="star" style="left:70%;top:34%"></span><span class="star" style="left:86%;top:68%"></span>
+      <div class="flyer">
+        <svg viewBox="0 0 240 130" aria-hidden="true">
+          <path d="M62 70 L6 80 L14 68 L2 58 L62 62Z" fill="url(#gFly)"/>
+          <path class="w" d="M108 56 C104 30 78 8 36 0 C56 14 66 30 72 60Z" fill="url(#gFlyFar)"/>
+          <ellipse cx="100" cy="66" rx="48" ry="21" transform="rotate(-6 100 66)" fill="url(#gFly)"/>
+          <circle cx="152" cy="56" r="18" fill="url(#gFly)"/>
+          <g transform="translate(186 62) rotate(10)">
+            <ellipse cx="22" cy="14" rx="34" ry="26" fill="url(#gGlow)"/>
+            <rect x="0" y="0" width="44" height="30" rx="3" fill="url(#gPaper)" stroke="#cdbf9a"/>
+            <path d="M1 1 L22 17 L43 1" fill="none" stroke="#cdbf9a" stroke-width="1.2"/>
+            <circle cx="22" cy="17" r="6.5" fill="#f0576b"/>
+            <path d="M22 21 C16.5 17 17.5 12.5 22 15.5 C26.5 12.5 27.5 17 22 21Z" fill="#fff"/>
+          </g>
+          <path d="M166 50 L198 60 L166 68Z" fill="url(#gBeak)"/>
+          <circle cx="158" cy="51" r="5" fill="#0a0d20" stroke="url(#gGold)" stroke-width="1.6"/>
+          <circle cx="157" cy="50" r="1.2" fill="#fff"/>
+          <path class="w" d="M104 58 C98 28 66 6 20 -2 C46 12 58 32 66 66Z" fill="url(#gFly)"/>
+        </svg>
+      </div>
+    </div>
+    <p class="load-msg">속까마귀가 현재 리포트를 물고 당신에게 날아가고 있습니다...</p>
+    <div class="load-bar" aria-hidden="true"><i></i></div>
+  </section>
+
+  <!-- REPORT -->
+  <section class="sec" id="report" aria-labelledby="rep-h">
+    <div class="sec-head">
+      <p class="kicker">무료 요약 리포트</p>
+      <h2 id="rep-h">그 사람도 나랑 같은 마음인지, 신호로 보여 드려요</h2>
+      <p>대화가 충분하면 쌍방 신호와 나와 상대의 비교를 무료로 보여 드려요. 대화가 너무 짧으면 솔직하게 분석이 어렵다고 말씀드려요. 아래 이름과 숫자는 모두 예시예요.</p>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="리포트 상태 미리보기">
+      <button class="tab" role="tab" id="tab-ok" aria-selected="true" aria-controls="panel-ok" type="button">대화가 충분할 때</button>
+      <button class="tab" role="tab" id="tab-no" aria-selected="false" aria-controls="panel-no" type="button" tabindex="-1">대화가 부족할 때</button>
+    </div>
+
+    <div id="panel-ok" role="tabpanel" aria-labelledby="tab-ok">
+      <article class="sheet">
+        <div class="sheet-top">
+          <svg class="ic" viewBox="0 0 48 48" aria-hidden="true"><use href="#mark"/></svg>
+          <h3>까비의 대화 리포트</h3>
+          <span class="tag">예시 데이터</span>
+        </div>
+        <p class="summary">쌍방 신호 5개 중 <b>3개가 보여요</b>. 나는 빠르고 길게, 상대는 천천히 짧게 보내지만 질문은 상대가 더 많이 해요. 쌍방 신호는 72점으로 기대해 볼 만한 구간이에요.</p>
+
+        <div class="sheet-grid">
+          <div>
+            <section class="blk" aria-labelledby="sig-h">
+              <h4 id="sig-h">쌍방 신호 체크</h4>
+              <p class="sub">마음이 같은 방향일 때 자주 나타나는 5가지</p>
+              <ul class="sigs">
+                <li><span class="si on">✓</span><span>질문을 먼저 던져요</span><em>있어요</em></li>
+                <li><span class="si on">✓</span><span>밤에 답장이 빨라져요</span><em>있어요</em></li>
+                <li><span class="si on">✓</span><span>내가 한 말을 다시 꺼내요</span><em>있어요</em></li>
+                <li><span class="si mid">?</span><span>약속을 구체적으로 잡아요</span><em>애매해요</em></li>
+                <li><span class="si off">–</span><span>먼저 연락해요</span><em>아직 적어요</em></li>
+              </ul>
+            </section>
+
+            <section class="blk" aria-labelledby="cmp-h">
+              <h4 id="cmp-h">나와 상대, 이렇게 달라요</h4>
+              <p class="sub">최근 대화 3개월 기준</p>
+              <div class="legend"><span><i class="dot me"></i>나</span><span><i class="dot you"></i>상대</span></div>
+
+              <div class="metric">
+                <div class="m-label">평균 답장 속도</div>
+                <div class="m-row"><span class="who me">나</span><div class="bar me"><i style="width:36%"></i></div><b>4분</b></div>
+                <div class="m-row"><span class="who you">상대</span><div class="bar you"><i style="width:100%"></i></div><b>11분</b></div>
+                <p class="m-note">상대가 평균 7분 늦게 답해요. 밤에는 격차가 거의 없어요.</p>
+              </div>
+              <div class="metric">
+                <div class="m-label">먼저 연락한 비율</div>
+                <div class="m-row"><span class="who me">나</span><div class="bar me"><i style="width:64%"></i></div><b>64%</b></div>
+                <div class="m-row"><span class="who you">상대</span><div class="bar you"><i style="width:36%"></i></div><b>36%</b></div>
+                <p class="m-note">대화를 먼저 여는 쪽은 주로 나예요.</p>
+              </div>
+              <div class="metric">
+                <div class="m-label">메시지 한 개당 평균 길이</div>
+                <div class="m-row"><span class="who me">나</span><div class="bar me"><i style="width:100%"></i></div><b>28자</b></div>
+                <div class="m-row"><span class="who you">상대</span><div class="bar you"><i style="width:50%"></i></div><b>14자</b></div>
+                <p class="m-note">상대는 짧게 자주 끊어 보내는 편이에요.</p>
+              </div>
+              <div class="metric">
+                <div class="m-label">질문이 들어간 메시지 비율</div>
+                <div class="m-row"><span class="who me">나</span><div class="bar me"><i style="width:71%"></i></div><b>22%</b></div>
+                <div class="m-row"><span class="who you">상대</span><div class="bar you"><i style="width:100%"></i></div><b>31%</b></div>
+                <p class="m-note">상대가 질문을 더 많이 해요. 대화를 이어 가려는 패턴으로 볼 수 있어요.</p>
+              </div>
+              <div class="metric">
+                <div class="m-label">하루 평균 메시지 수</div>
+                <div class="m-row"><span class="who me">나</span><div class="bar me"><i style="width:100%"></i></div><b>38개</b></div>
+                <div class="m-row"><span class="who you">상대</span><div class="bar you"><i style="width:68%"></i></div><b>26개</b></div>
+              </div>
+            </section>
+          </div>
+
+          <div>
+            <section class="blk" aria-labelledby="time-h">
+              <h4 id="time-h">시간대별 평균 답장 속도</h4>
+              <p class="sub">막대가 낮을수록 빨리 답해요 (단위: 분)</p>
+              <div class="tchart" role="img" aria-label="시간대별 평균 답장 속도. 나는 아침 7분, 낮 5분, 저녁 3분, 심야 4분. 상대는 아침 24분, 낮 14분, 저녁 6분, 심야 3분.">
+                <div class="slot"><div class="col me"><span>7</span><i style="height:31px"></i></div><div class="col you"><span>24</span><i style="height:106px"></i></div></div>
+                <div class="slot"><div class="col me"><span>5</span><i style="height:22px"></i></div><div class="col you"><span>14</span><i style="height:62px"></i></div></div>
+                <div class="slot"><div class="col me"><span>3</span><i style="height:13px"></i></div><div class="col you"><span>6</span><i style="height:26px"></i></div></div>
+                <div class="slot"><div class="col me"><span>4</span><i style="height:18px"></i></div><div class="col you"><span>3</span><i style="height:13px"></i></div></div>
+              </div>
+              <div class="tlabels"><span><b>아침</b>6–11시</span><span><b>낮</b>11–18시</span><span><b>저녁</b>18–23시</span><span><b>심야</b>23–3시</span></div>
+              <p class="unit-note">상대는 낮에는 느리고 밤 11시 이후에 가장 빨라져요.</p>
+            </section>
+
+            <section class="blk" aria-labelledby="kw-h">
+              <h4 id="kw-h">상대가 자주 꺼내는 이야기</h4>
+              <p class="sub">상대 메시지에서 많이 나온 주제 (횟수)</p>
+              <ul class="kw">
+                <li><span>주말 약속</span><div class="bar"><i style="width:100%"></i></div><b>14</b></li>
+                <li><span>맛집</span><div class="bar"><i style="width:79%"></i></div><b>11</b></li>
+                <li><span>야근</span><div class="bar"><i style="width:64%"></i></div><b>9</b></li>
+                <li><span>강아지</span><div class="bar"><i style="width:50%"></i></div><b>7</b></li>
+                <li><span>운동</span><div class="bar"><i style="width:36%"></i></div><b>5</b></li>
+              </ul>
+            </section>
+
+            <section class="blk" aria-labelledby="care-h">
+              <h4 id="care-h">상대가 중요하게 보는 것</h4>
+              <p class="sub">대화 흐름에서 읽히는 요약</p>
+              <ul class="care">
+                <li><strong>시간 약속</strong><span>일정과 시간이 구체적으로 나오면 답장이 평균 5분으로 빨라져요.</span></li>
+                <li><strong>일상 공유</strong><span>음식과 반려견 이야기를 할 때 메시지 길이가 평소의 2배가 돼요.</span></li>
+                <li><strong>기억해 주는 느낌</strong><span>내가 지난 얘기를 다시 꺼냈을 때 되묻는 반응이 가장 많았어요.</span></li>
+              </ul>
+            </section>
+
+            <section class="blk" aria-labelledby="tone-h">
+              <h4 id="tone-h">상대의 말투</h4>
+              <p class="sub">자주 보이는 습관</p>
+              <ul class="chips">
+                <li>짧게 끊어 보내요</li>
+                <li>ㅎㅎ를 자주 써요</li>
+                <li>존댓말을 유지해요</li>
+                <li>질문으로 말을 맺어요</li>
+              </ul>
+            </section>
+          </div>
+        </div>
+
+        <div class="locked">
+          <h4>까비만 아는 속마음 3가지</h4>
+          <div class="blur" aria-hidden="true">
+            <p>1. 이 사람이 나한테만 다르게 하는 말은 “오늘은 어땠어요?”예요.</p>
+            <p>2. 답장이 늦어지는 진짜 이유는 바빠서가 아니라 고민하는 날이에요.</p>
+            <p>3. 다음에 먼저 꺼내면 좋은 말과, 꺼내면 분위기가 식는 말이 있어요.</p>
+          </div>
+          <div class="lock-cover">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            <p>이 사람 속마음, 궁금하죠?</p>
+            <button class="btn btn-gold btn-sm" type="button" data-login>2,900원으로 열기</button>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div id="panel-no" role="tabpanel" aria-labelledby="tab-no" hidden>
+      <article class="sheet">
+        <div class="nodata">
+          <div class="q-plate" aria-hidden="true">?</div>
+          <h3>상대와의 대화 패턴이 현재 분석되지 않습니다</h3>
+          <p>조금 더 가능한 더 많은 채팅과 이야기를 담아서 올려주세요.</p>
+          <div class="got"><span>올린 대화 약 1일치</span><span>상대 메시지가 적어요</span></div>
+          <div class="howto">
+            <h4>이렇게 올리면 더 정확해요</h4>
+            <ul>
+              <li>며칠 이상 이어진 대화를 올려 주세요</li>
+              <li>상대가 직접 보낸 메시지가 충분히 담기게 해 주세요</li>
+              <li>여러 날의 대화를 한 파일로 내보내 주세요</li>
+            </ul>
+          </div>
+          <p class="free-note">분석이 안 된 경우에는 결제가 진행되지 않아요. 파일을 다시 올려 주세요.</p>
+          <button class="btn btn-gold" type="button" data-login>대화 다시 올리기</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- SIM CHAT -->
+  <section class="sec" aria-labelledby="sim-h">
+    <div class="sim">
+      <div class="sim-text">
+        <p class="kicker">그 사람 AI와 채팅</p>
+        <h2 id="sim-h">보내기 전에, 먼저 말 걸어 보세요</h2>
+        <p>까비가 그 사람 말투를 익혀서 대신 답하고, 답장마다 왜 그렇게 말했는지 해석해 드려요. 이 말을 하면 어떻게 받아칠지 미리 느껴 볼 수 있어요.</p>
+        <ul class="rules">
+          <li><b>처음 3번</b><span>로그인하면 무료로 대화해 볼 수 있어요.</span></li>
+          <li><b>결제 후</b><span>2,900원으로 하루 15번까지 이어서 대화해요.</span></li>
+          <li><b>15번 이후</b><span>다 쓰면 다음 날 다시 이용할 수 있어요.</span></li>
+        </ul>
+        <div class="tabs sim-tabs" role="tablist" aria-label="채팅 상태 미리보기">
+          <button class="tab" role="tab" id="tab-free" aria-selected="true" aria-controls="panel-free" type="button">무료 3번 끝</button>
+          <button class="tab" role="tab" id="tab-full" aria-selected="false" aria-controls="panel-full" type="button" tabindex="-1">하루 15번 끝</button>
+        </div>
+      </div>
+
+      <div class="phone">
+        <p class="chat-note">대화 패턴으로 만든 시뮬레이션이에요. 실제 상대의 생각이 아니에요.</p>
+        <div id="panel-free" role="tabpanel" aria-labelledby="tab-free">
+          <div class="msgs">
+            <div class="bub me">점심 뭐 드셨어요?</div>
+            <div class="tname">상대 AI</div>
+            <div class="bub you">회사 앞에서 김치찌개 먹었어요 ㅎㅎ 그쪽은요?</div>
+            <div class="bub me">저는 샐러드요. 주말엔 뭐 하세요?</div>
+            <div class="tname">상대 AI</div>
+            <div class="bub you">아직 별일 없어요 ㅎㅎ 혹시 약속 있어요?</div>
+            <div class="bub me">가보고 싶은 맛집이 있는데 같이 가실래요?</div>
+            <div class="tname">상대 AI</div>
+            <div class="bub you">좋아요! 근데 토요일은 오후가 나을 것 같아요</div>
+          </div>
+          <div class="paywall">
+            <p>한창 대화가 풀리는 중이었는데… 까악.<br>이어서 하려면 2,900원이에요.</p>
+            <button class="btn btn-gold btn-sm" type="button" data-login>대화 이어가기</button>
+          </div>
+        </div>
+        <div id="panel-full" role="tabpanel" aria-labelledby="tab-full" hidden>
+          <div class="msgs">
+            <div class="bub me">그럼 토요일 오후 3시에 볼까요?</div>
+            <div class="tname">상대 AI</div>
+            <div class="bub you">좋아요! 그날 기대돼요 ㅎㅎ</div>
+          </div>
+          <div class="paywall">
+            <div class="used"><span>오늘 15/15번</span><div class="meter" aria-hidden="true"><i></i></div></div>
+            <p>오늘의 대화 15번을 모두 썼어요.<br>내일 오전 0시에 다시 이어서 이용할 수 있어요.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIVACY -->
+  <section class="sec" aria-labelledby="priv-h">
+    <div class="sec-head">
+      <p class="kicker">프라이버시</p>
+      <h2 id="priv-h">내 대화는 내 것이니까요</h2>
+    </div>
+    <ul class="priv">
+      <li><div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div><h3>내 기기에서 먼저 가려요</h3><p>전화번호, 이메일, 계좌번호, 주소는 분석 전에 내 기기에서 가려져요.</p></li>
+      <li><div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg></div><h3>서버에 저장하지 않아요</h3><p>대화는 분석하는 순간에만 쓰고 저장하지 않아요. 결과와 채팅 기록은 내 브라우저에만 남아요.</p></li>
+      <li><div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"/><circle cx="12" cy="12" r="2.5"/><path d="M4 4l16 16"/></svg></div><h3>AI 학습에 쓰지 않아요</h3><p>분석에 쓰는 AI 서비스는 고객 데이터를 모델 학습에 쓰지 않는 조건으로 이용해요.</p></li>
+      <li><div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>버튼 한 번으로 전부 삭제</h3><p>결과 화면에서 언제든 내 데이터를 모두 지울 수 있어요.</p></li>
+    </ul>
+    <div class="flow" aria-label="데이터 처리 흐름">
+      <span>내 기기에서 가리기</span><i>→</i><span>가려진 대화로 분석</span><i>→</i><span>서버에 남기지 않음</span>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="sec" id="price" aria-labelledby="price-h">
+    <div class="sec-head">
+      <p class="kicker">요금</p>
+      <h2 id="price-h">그 사람 속마음, 2,900원이면 열려요</h2>
+    </div>
+    <div class="plans">
+      <article class="plan">
+        <h3>무료 요약</h3>
+        <p class="price">0원</p>
+        <ul>
+          <li>쌍방 신호 점수와 체크리스트</li>
+          <li>나와 상대 비교 (답장 속도, 먼저 연락 비율 등)</li>
+          <li>상대가 자주 꺼내는 이야기 요약</li>
+          <li>그 사람 AI와 채팅 3번</li>
+        </ul>
+        <button class="btn btn-ghost" type="button" data-login>카카오로 시작</button>
+      </article>
+      <article class="plan pro">
+        <h3>속마음 열기</h3>
+        <p class="price">2,900<small>원</small></p>
+        <ul>
+          <li>까비만 아는 속마음 상세 리포트</li>
+          <li>그 사람 AI와 하루 15번 채팅</li>
+          <li>결제일부터 30일, 다 쓰면 다음 날 다시 이용</li>
+          <li>카드·간편결제로 바로 결제</li>
+        </ul>
+        <button class="btn btn-gold" type="button" data-login>속마음 열어보기</button>
+      </article>
+    </div>
+    <p class="coffee">카페 음료 한 잔보다 가벼운 가격으로, 혼자 추측하던 시간을 줄여 보세요.</p>
+  </section>
+
+  <!-- FAQ -->
+  <section class="sec" aria-labelledby="faq-h">
+    <div class="sec-head"><p class="kicker">자주 묻는 질문</p><h2 id="faq-h">궁금한 게 있나요?</h2></div>
+    <div class="faq">
+      <details><summary>왜 로그인해야 하나요?</summary><p>결제 내역과 리포트를 내 계정에 안전하게 보관하고, 하루 대화 횟수를 관리하기 위해서예요. 카카오 로그인은 3초면 끝나요.</p></details>
+      <details><summary>상대방한테 알림이 가나요?</summary><p>아니요. 대화 내보내기는 내 카톡 앱 안에서만 이뤄져서 상대에게 알림이 가지 않아요.</p></details>
+      <details><summary>속마음이 진짜 맞나요?</summary><p>대화 패턴을 바탕으로 한 AI의 추정이에요. 실제 상대의 생각과 다를 수 있으니 재미와 참고용으로 봐 주세요.</p></details>
+      <details><summary>대화를 하루밖에 안 했는데 분석되나요?</summary><p>대화가 너무 짧으면 솔직하게 분석이 어렵다고 알려 드려요. 이 경우 결제는 진행되지 않고, 더 많은 대화를 담아 다시 올리면 돼요.</p></details>
+      <details><summary>AI 대화는 몇 번까지 할 수 있나요?</summary><p>처음 3번은 무료예요. 결제하면 결제일부터 30일 동안 하루 15번까지 대화할 수 있고, 다 쓰면 다음 날 0시에 다시 채워져요.</p></details>
+      <details><summary>올린 대화는 어떻게 되나요?</summary><p>대화는 서버에 저장하지 않아요. 분석하는 순간에만 AI로 보내고, 리포트와 채팅 기록은 내 브라우저에만 남아요. 결과 화면의 "내 데이터 지우기"로 언제든 전부 지울 수 있어요.</p></details>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final" id="start-here" aria-labelledby="fin-h">
+    <svg class="ic" viewBox="0 0 48 48" aria-hidden="true"><use href="#mark"/></svg>
+    <h2 id="fin-h">답장 기다리며 혼자 추측하지 마세요</h2>
+    <p>카카오로 3초 만에 시작하고, 대화 파일을 올리면 쌍방 신호를 무료로 알려 드려요.</p>
+    <button class="btn btn-kakao" type="button" data-login>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.8 1.8 5.3 4.6 6.7l-1 3.6c-.1.3.2.5.5.4l4.3-2.8c.5.1 1.1.1 1.6.1 5.5 0 10-3.6 10-8S17.5 3 12 3z"/></svg>
+      카카오로 3초 만에 시작
+    </button>
+    <a class="drop" href="#app" style="display:block;text-decoration:none">
+      <strong>대화 파일 올리기</strong>
+      <span>로그인하면 위에서 카톡 대화 파일(.txt)을 바로 올릴 수 있어요</span>
+    </a>
+  </section>
+
+  <footer>
+    <p>속까마귀는 대화 패턴을 분석하는 엔터테인먼트 서비스이며, 결과는 실제 상대의 생각과 다를 수 있어요.</p>
+    <!-- 사업자 정보: 배포 전에 실제 정보로 바꿔 주세요 (토스페이먼츠 심사 필수 항목) -->
+    <p class="biz">상호 [상호명] · 대표 [대표자명] · 사업자등록번호 [000-00-00000] · 통신판매업신고 [제0000-지역-0000호]<br>주소 [사업장 주소] · 고객문의 [help@example.com] · 전화 [000-0000-0000]</p>
+    <p class="links"><a href="/terms.html">이용약관</a><a href="/privacy.html"><b>개인정보처리방침</b></a><a href="/refund.html">환불 정책</a><button type="button" id="acct-del" hidden>회원 탈퇴</button></p>
+  </footer>
+</div>
+
+<!-- TALK PAGE (#talk) -->
+<div id="talk" hidden>
+  <header class="tk-head">
+    <a class="tk-icon" href="#app" aria-label="리포트로 돌아가기"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+    <div class="tk-title"><h1 id="tk-name">상대</h1><span id="tk-sub">AI 시뮬레이션</span></div>
+    <button class="tk-icon" type="button" id="tk-menu-go" aria-label="채팅방 메뉴"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  </header>
+  <div class="tk-quota" id="tk-quota" role="status"></div>
+  <main class="tk-body" id="tk-body" aria-live="polite">
+    <div class="tk-inner" id="tk-inner"></div>
+  </main>
+  <div class="tk-wall" id="tk-wall" hidden></div>
+  <form class="tk-bar" id="tk-form" autocomplete="off">
+    <textarea id="tk-in" rows="1" maxlength="300" aria-label="메시지 입력" placeholder="메시지 입력"></textarea>
+    <button class="tk-send" type="submit" id="tk-send" disabled>전송</button>
+  </form>
+  <div class="tk-empty" id="tk-none" hidden>
+    <svg class="ic" viewBox="0 0 48 48" aria-hidden="true"><use href="#mark"/></svg>
+    <h2>아직 익힌 대화가 없어요</h2>
+    <p>먼저 그 사람과의 카톡 대화를 올리면, 까비가 말투를 익혀서 이 채팅방을 열어 드려요.</p>
+    <a class="btn btn-gold" href="#app">대화 올리러 가기</a>
+  </div>
+</div>
+
+<!-- TALK MENU -->
+<dialog id="tk-menu" aria-labelledby="tk-menu-h">
+  <button class="xbtn" type="button" id="tk-menu-x" aria-label="닫기">×</button>
+  <h2 id="tk-menu-h">채팅방 설정</h2>
+  <form id="tk-rename" class="tk-menu-form">
+    <label for="tk-rename-in">상대 이름</label>
+    <input class="field" id="tk-rename-in" maxlength="16" required>
+    <label for="tk-mbti-in">상대 MBTI</label>
+    <select class="field js-mbti" id="tk-mbti-in"></select>
+    <label class="tk-check"><input type="checkbox" id="tk-kabi-in" checked> 답장마다 까비의 해석 보기</label>
+    <button class="btn btn-gold" type="submit">저장</button>
+  </form>
+  <div class="tk-menu-list">
+    <button class="btn btn-ghost" type="button" id="tk-reset">시뮬레이션 대화 지우기</button>
+    <a class="btn btn-ghost" href="#app" id="tk-back">리포트로 돌아가기</a>
+  </div>
+</dialog>
+
+<!-- LOGIN -->
+<dialog id="login" aria-labelledby="login-h">
+  <button class="xbtn" type="button" id="login-x" aria-label="닫기">×</button>
+  <svg class="ic" viewBox="0 0 48 48" aria-hidden="true"><use href="#mark"/></svg>
+  <h2 id="login-h">3초 만에 시작해요</h2>
+  <div id="login-1">
+    <p>로그인하면 리포트와 결제 내역을 내 계정에 안전하게 보관해 드려요.</p>
+    <div class="login-list">
+      <a class="btn btn-kakao" href="/api/auth/kakao" id="kk-start">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.8 1.8 5.3 4.6 6.7l-1 3.6c-.1.3.2.5.5.4l4.3-2.8c.5.1 1.1.1 1.6.1 5.5 0 10-3.6 10-8S17.5 3 12 3z"/></svg>
+        카카오로 3초 만에 시작
+      </a>
+    </div>
+  </div>
+  <p class="login-note">카카오 계정의 대화는 가져오지 않아요. 내가 직접 올린 파일만 분석해요.<br>시작하면 <a href="/terms.html" target="_blank" rel="noopener">이용약관</a>과 <a href="/privacy.html" target="_blank" rel="noopener">개인정보처리방침</a>에 동의하게 돼요.</p>
+</dialog>
+
+<!-- PAY -->
+<dialog id="pay" aria-labelledby="pay-h">
+  <button class="xbtn" type="button" id="pay-x" aria-label="닫기">×</button>
+  <svg class="ic" viewBox="0 0 48 48" aria-hidden="true"><use href="#mark"/></svg>
+  <h2 id="pay-h">속마음 열기</h2>
+  <p class="pay-amt">2,900원</p>
+  <ul class="pay-items">
+    <li>호감 온도와 결정적 순간 (실제 대화 인용)</li>
+    <li>답장 속도 추이·되묻기율 등 정밀 지표</li>
+    <li>까비만 아는 속마음 3가지</li>
+    <li>보낼 말 추천과 피해야 할 말</li>
+    <li>그 사람 AI와 하루 15번 카톡 (결제일부터 30일)</li>
+  </ul>
+  <button class="btn btn-kakao pay-go" type="button" id="pay-go">결제하기</button>
+  <p id="pay-err" class="pay-err" role="alert"></p>
+  <p class="pay-note">디지털 콘텐츠 특성상 리포트를 연 뒤에는 청약철회가 제한돼요. 자세한 내용은 <a href="/refund.html" target="_blank" rel="noopener">환불 정책</a>을 확인해 주세요.</p>
+</dialog>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+(function(){
+'use strict';
+var $=function(s){return document.querySelector(s)};
+var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
+function pad(n){return (n<10?'0':'')+n}
+var RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+/* ---------- per-viewer demo state ---------- */
+var KEY='skm-prefs-v1',TKEY='skm-talk-v3',S={},TK=null;
+try{S=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){S={}}
+try{TK=JSON.parse(localStorage.getItem(TKEY)||'null')}catch(e){TK=null}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function tkSave(){try{if(TK)localStorage.setItem(TKEY,JSON.stringify(TK));else localStorage.removeItem(TKEY)}catch(e){}}
+function today(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+
+/* ---------- dialogs ---------- */
+function openDlg(d){try{d.showModal()}catch(e){d.setAttribute('open','')}}
+function closeDlg(d){if(d.close)d.close();else d.removeAttribute('open')}
+var dlg=$('#login'),pay=$('#pay'),tkMenu=$('#tk-menu');
+[dlg,pay,tkMenu].forEach(function(d){d.addEventListener('click',function(e){if(e.target===d)closeDlg(d)})});
+$('#login-x').onclick=function(){closeDlg(dlg)};
+$('#pay-x').onclick=function(){closeDlg(pay)};
+$('#tk-menu-x').onclick=function(){closeDlg(tkMenu)};
+
+function goApp(){if(location.hash==='#talk'){location.hash='app';return}var a=$('#app');if(a)a.scrollIntoView({behavior:RM?'auto':'smooth',block:'start'})}
+function openLogin(){if(USER){goApp();return}openDlg(dlg)}
+document.addEventListener('click',function(e){var b=e.target.closest('[data-login]');if(!b)return;e.preventDefault();openLogin()});
+function logout(){fetch('/api/auth/logout',{method:'POST',credentials:'same-origin'}).finally(function(){TK=null;tkSave();try{sessionStorage.clear()}catch(e){}location.href='/'})}
+
+/* ---------- header / steps ---------- */
+var headBtn=document.querySelector('.top [data-login]');
+var headSlot=document.createElement('div');headSlot.className='who-chip';headSlot.hidden=true;
+headBtn.parentNode.insertBefore(headSlot,headBtn);
+function renderAuth(){
+  var on=!!USER;headBtn.hidden=on;headSlot.hidden=!on;$('#acct-del').hidden=!on;
+  if(on){
+    headSlot.innerHTML='<span class="avatar" aria-hidden="true">'+esc(USER.nick.charAt(0))+'</span><span>'+esc(USER.nick)+'님</span><button type="button" id="logout-go">로그아웃</button>';
+    $('#logout-go').onclick=logout;$('#hello-nick').textContent=USER.nick;
+    if(!$('#st-guest').hidden)show('upload');
+  }
+}
+var STATES=['guest','upload','loading','result'];
+function show(name){
+  STATES.forEach(function(s){$('#st-'+s).hidden=(s!==name)});
+  var step={guest:1,upload:2,loading:2,result:3}[name];
+  $$('#app-steps span').forEach(function(sp){var n=+sp.dataset.step;sp.className=n<step?'done':(n===step?'on':'');if(name==='result'&&n===4&&DATA&&DATA.ok)sp.className='on'});
+}
+function setYName(n){$$('.js-yname').forEach(function(el){el.textContent=n})}
+var MBTIS=['ISTJ','ISFJ','INFJ','INTJ','ISTP','ISFP','INFP','INTP','ESTP','ESFP','ENFP','ENTP','ESTJ','ESFJ','ENFJ','ENTJ'];
+$$('.js-mbti').forEach(function(s){s.innerHTML='<option value="">모름</option>'+MBTIS.map(function(m){return '<option value="'+m+'">'+m+'</option>'}).join('')});
+function mbtiLine(o){var a=[];if(o.ymbti)a.push('상대 MBTI(이용자가 입력한 값): '+o.ymbti);if(o.mmbti)a.push('나의 MBTI: '+o.mmbti);return a.length?a.join(' / ')+' — 유형별 일반 경향은 참고만 하고, 실제 대화 패턴과 다르면 대화를 우선해.':''}
+
+/* ---------- parsing KakaoTalk exports ---------- */
+function to24(ap,h){h=+h;if(ap==='오후'&&h<12)h+=12;if(ap==='오전'&&h===12)h=0;return h}
+function parseCSV(raw){
+  var rows=[],f='',row=[],q=false;
+  for(var i=0;i<raw.length;i++){var c=raw[i];
+    if(q){if(c==='"'){if(raw[i+1]==='"'){f+='"';i++}else q=false}else f+=c}
+    else if(c==='"')q=true;else if(c===','){row.push(f);f=''}else if(c==='\n'){row.push(f);rows.push(row);row=[];f=''}else f+=c}
+  if(f||row.length){row.push(f);rows.push(row)}
+  return rows.slice(1).filter(function(r){return r.length>=3}).map(function(r){return {who:r[1].trim(),t:Date.parse(r[0].trim().replace(' ','T')),text:r.slice(2).join(',')}}).filter(function(m){return !isNaN(m.t)&&m.who});
+}
+function parseChat(raw){
+  raw=raw.replace(/^\uFEFF/,'').replace(/\r\n?/g,'\n');
+  if(/^\s*"?Date"?,"?User"?,"?Message/i.test(raw))return parseCSV(raw);
+  var out=[],cur=null,day=null,m;
+  var rePCDate=/^-{3,}\s*(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일/;
+  var rePC=/^\[([^\]]+)\]\s*\[(오전|오후)\s*(\d{1,2}):(\d{2})\]\s?(.*)$/;
+  var reMob=/^(\d{4})\s*[년.]\s*(\d{1,2})\s*[월.]\s*(\d{1,2})\s*[일.]?\s*(오전|오후)?\s*(\d{1,2}):(\d{2})(?::\d{2})?,\s*(.+?)\s:\s?(.*)$/;
+  var reDateStart=/^\d{4}\s*[년.]\s*\d{1,2}\s*[월.]\s*\d{1,2}/;
+  raw.split('\n').forEach(function(line){
+    if((m=line.match(rePCDate))){day=[+m[1],+m[2]-1,+m[3]];return}
+    if(day&&(m=line.match(rePC))){cur={who:m[1].trim(),t:new Date(day[0],day[1],day[2],to24(m[2],m[3]),+m[4]).getTime(),text:m[5]};out.push(cur);return}
+    if((m=line.match(reMob))){var h=m[4]?to24(m[4],m[5]):+m[5];cur={who:m[7].trim(),t:new Date(+m[1],+m[2]-1,+m[3],h,+m[6]).getTime(),text:m[8]};out.push(cur);return}
+    if(reDateStart.test(line))return;
+    if(cur&&line.trim())cur.text+='\n'+line;
+  });
+  return out;
+}
+
+/* ---------- masking (on device): contact & ID details only ---------- */
+function mask(t){
+  return String(t)
+    .replace(/0\d{1,2}[-.\s]?\d{3,4}[-.\s]?\d{4}/g,'[전화번호]')
+    .replace(/[\w.+-]+@[\w-]+\.[\w.]+/g,'[이메일]')
+    .replace(/https?:\/\/\S+/g,'[링크]')
+    .replace(/\d{6}[-\s]?[1-4]\d{6}/g,'[주민번호]')
+    .replace(/\d{2,6}-\d{2,6}-\d{2,8}/g,'[번호]')
+    .replace(/\d{9,}/g,'[번호]')
+    .replace(/[가-힣]+(시|구|군)\s[가-힣0-9]+(로|길|동)\s?\d+(-\d+)?/g,'[주소]');
+}
+
+/* ---------- analysis ---------- */
+var MEDIA=/^(사진|동영상|이모티콘|파일|음성메시지|사진 \d+장|삭제된 메시지입니다\.?|보이스톡.*|페이스톡.*|\(이모티콘\).*|<사진 읽지 않음>|<동영상 읽지 않음>|\[사진\]|\[이모티콘\]|샵검색.*)$/;
+var EMO=/^(이모티콘|\(이모티콘\).*|\[이모티콘\])$/;
+function isQ(t){t=t.trim();return /[?？]/.test(t)||/(까|니|냐|나요|래요|을래|죠|ㄹ까|어때|어때요|뭐해|뭐해요)\s*[ㅎㅋ~^.!ㅠㅜ]*$/.test(t)}
+var RECALL=/(그때|저번|지난번|아까|말했던|했던 거|말한 거|그 얘기|기억나|기억해)/;
+var PLAN=/(언제|몇\s?시|주말|토요일|일요일|금요일|다음\s?주|담주|만나|보자|볼래|볼까|갈래|가자|가요\?|같이|약속)/;
+var STOP=('그래서 그리고 근데 그냥 진짜 너무 정말 오늘 내일 어제 지금 이제 아니 그럼 혹시 저도 나도 저는 나는 제가 내가 우리 그거 이거 저거 그게 이게 뭐야 뭐해 했어요 해요 있어요 없어요 같아요 그런 이런 저런 많이 조금 하는 하고 했는데 있는데 그렇게 이렇게 아직 계속 다시 완전 약간 사진 이모티콘 동영상 감사합니다 감사해요 고마워요 고마워 네네 응응 알겠어 알겠어요 괜찮아요 괜찮아 그쵸 맞아요 맞아 좋아요 좋아 대박 헐 아하 그러게 그러게요 나중에 일단 요즘 그거요 뭐지 근데요 담에 다음에 같이 무슨 어디 뭐가 누구 얼마나 그래도 이따 있어 없어 하나 정도 진짜요 그냥요 그래요 그렇죠 삭제된 메시지입니다').split(' ');
+var STOPS={};STOP.forEach(function(w){STOPS[w]=1});
+var VERBEND=/(어요|아요|해요|했어|해서|는데|네요|어서|지만|니까|었어|았어|겠다|거든|습니다|세요|할래|할까|하자|싶다|싶어|했다|한다|해야|하면|되면|돼요|됐어|였어|이에요|예요|인데|라서|면서|어야|을게|ㄹ게|할게|던데|더라)$/;
+function nameVars(n){var k=String(n).replace(/\s+/g,'');var v=[k];if(/^[가-힣]{3}$/.test(k))v.push(k.slice(1));return v}
+function keywords(texts,ban){
+  var cnt={};
+  texts.forEach(function(t){var seen={};
+    t.split(/[\s.,!?~^…"'()\[\]\/:;]+/).forEach(function(w){
+      w=w.replace(/[ㄱ-ㅎㅏ-ㅣ]+/g,'');
+      var s=w.replace(/(이랑|에서|에게|한테|으로|까지|부터|처럼|이나|은|는|이|가|을|를|에|도|랑|로|와|과|의)$/,'');
+      if(s.length>=2)w=s;
+      if(!/^[가-힣]{2,6}$/.test(w)||STOPS[w]||VERBEND.test(w)||/님$/.test(w)||/요$/.test(w)||(w.length<=3&&/[다죠까네지고게서래자어아할을던는한은]$/.test(w))||ban.some(function(b){return w.indexOf(b)>=0||b.indexOf(w)>=0}))return;
+      if(!seen[w]){seen[w]=1;cnt[w]=(cnt[w]||0)+1}
+    });
+  });
+  return Object.keys(cnt).map(function(k){return [k,cnt[k]]}).filter(function(p){return p[1]>=2}).sort(function(a,b){return b[1]-a[1]}).slice(0,5);
+}
+function slotOf(t){var h=new Date(t).getHours();if(h>=6&&h<11)return 0;if(h>=11&&h<18)return 1;if(h>=18&&h<23)return 2;return 3}
+function mean(a){if(!a.length)return null;var s=0;a.forEach(function(x){s+=x});return s/a.length}
+function newSide(){return {n:0,textN:0,chars:0,q:0,init:0,replies:[],replyT:[],slot:[[],[],[],[]],texts:[],recall:0,plan:0,hh:0,kk:0,polite:0,tilde:0,emo:0,qEnd:0,period:0,ell:0,night:0}}
+function fmtLine(m,me){var d=new Date(m.t);return '['+(d.getMonth()+1)+'/'+d.getDate()+' '+pad(d.getHours())+':'+pad(d.getMinutes())+'] '+(m.who===me?'나':'상대')+': '+mask(m.text.trim().replace(/\n/g,' ')).slice(0,220)}
+
+/* timeline-spread excerpt: whole history when it fits, else early/middle windows + recent block */
+function excerpt(list,me,max){
+  var lines=list.filter(function(m){return m.text.trim()}).map(function(m){return fmtLine(m,me)});
+  var total=lines.reduce(function(a,l){return a+l.length+1},0);
+  if(total<=max)return lines.join('\n');
+  var recentB=max*0.6,out=[],len=0,i=lines.length-1;
+  while(i>=0&&len<recentB){out.unshift(lines[i]);len+=lines[i].length+1;i--}
+  var head=lines.slice(0,i+1),wins=4,wb=(max-len)/wins,parts=[];
+  for(var w=0;w<wins;w++){
+    var st=Math.floor(head.length*w/wins),seg=[],l=0;
+    for(var j=st;j<head.length&&l<wb;j++){seg.push(head[j]);l+=head[j].length+1}
+    if(seg.length)parts.push(seg.join('\n'));
+  }
+  return parts.join('\n…(중략)…\n')+'\n…(중략)…\n'+out.join('\n');
+}
+
+function analyze(all,me,you){
+  var GAP=3*3600e3,cap=180;
+  var list=all.filter(function(m){return m.who===me||m.who===you}).sort(function(a,b){return a.t-b.t});
+  var st={me:newSide(),you:newSide()},prev=null,days={},sessions=[],sess=null;
+  list.forEach(function(m){
+    var s=m.who===me?'me':'you',x=st[s],t=m.text.trim();
+    var d=new Date(m.t);days[d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()]=1;
+    x.n++;
+    if(EMO.test(t))x.emo++;
+    var hr=d.getHours();if(hr>=23||hr<3)x.night++;
+    if(!MEDIA.test(t)&&t){
+      x.textN++;x.chars+=t.length;x.texts.push(t);
+      if(isQ(t))x.q++;if(RECALL.test(t))x.recall++;if(PLAN.test(t))x.plan++;
+      if(/ㅎㅎ/.test(t))x.hh++;if(/ㅋㅋ/.test(t))x.kk++;
+      if(/(요|니다|세요|죠)[\s?!.~ㅎㅋ^]*$/.test(t))x.polite++;
+      if(/~/.test(t))x.tilde++;if(/[?？]\s*$/.test(t))x.qEnd++;
+      if(/[^.]\.$/.test(t))x.period++;if(/(\.\.|…)/.test(t))x.ell++;
+    }
+    if(!prev||m.t-prev.t>GAP){x.init++;sess=[];sessions.push(sess)}
+    else if(prev.who!==m.who){var dl=Math.min(cap,(m.t-prev.t)/60000);x.replies.push(dl);x.replyT.push({t:m.t,d:dl});x.slot[slotOf(prev.t)].push(dl)}
+    sess.push(m);prev=m;
+  });
+  var activeDays=Object.keys(days).length;
+  var r={me:me,you:you,list:list,st:st,activeDays:activeDays,total:list.length};
+  r.ok=activeDays>=2&&st.you.n>=30&&st.you.replies.length>=8&&st.me.n>=10;
+  if(!r.ok)return r;
+
+  function side(x){return {avg:mean(x.replies),len:x.textN?x.chars/x.textN:0,qr:x.textN?x.q/x.textN:0,slots:x.slot.map(function(a){return a.length>=2?mean(a):null}),perDay:x.n/activeDays}}
+  var M=side(st.me),Y=side(st.you),inits=st.me.init+st.you.init;
+  M.init=inits?st.me.init/inits:0;Y.init=inits?st.you.init/inits:0;r.M=M;r.Y=Y;
+
+  var nightArr=st.you.slot[2].concat(st.you.slot[3]),night=mean(nightArr);
+  var sig=[];
+  sig.push({t:'질문을 먼저 던져요',v:(Y.qr>=0.15&&Y.qr>=M.qr*0.85)?2:(Y.qr>=0.08?1:0)});
+  sig.push({t:'밤에 답장이 빨라져요',v:(nightArr.length>=3&&night!=null&&night<=Y.avg*0.8)?2:(nightArr.length>=3&&night<=Y.avg)?1:0});
+  sig.push({t:'내가 한 말을 다시 꺼내요',v:st.you.recall>=5?2:(st.you.recall>=2?1:0)});
+  sig.push({t:'약속을 구체적으로 잡아요',v:st.you.plan>=8?2:(st.you.plan>=3?1:0)});
+  sig.push({t:'먼저 연락해요',v:Y.init>=0.4?2:(Y.init>=0.25?1:0)});
+  r.sig=sig;
+  var on=sig.filter(function(s){return s.v===2}).length,score=sig.reduce(function(a,s){return a+s.v*9},0);
+  if(Y.avg!=null&&M.avg!=null&&Y.avg<=Math.max(M.avg*1.5,3))score+=6;
+  if(Y.len>=M.len*0.7)score+=4;
+  r.score=Math.max(8,Math.min(97,Math.round(score+3)));r.on=on;
+
+  var type;
+  if(Y.init>=0.45&&Y.avg<=Math.max(M.avg*1.3,3))type='직진 신호형';
+  else if(r.score<35)type='철벽 수비형';
+  else if(sig[1].v===2&&Y.avg>M.avg)type='밤에 다정형';
+  else if(Y.qr>=M.qr&&Y.init<0.4)type='밀당 장인형';
+  else if(Math.abs(Y.init-0.5)<0.12&&Math.abs(Y.avg-M.avg)<5)type='티키타카형';
+  else type='천천히 타는 불씨형';
+  r.type=type;
+  var band=r.score>=70?'기대해 볼 만한 구간이에요':(r.score>=45?'가능성이 열려 있는 구간이에요':'아직은 서로 탐색 중인 구간이에요');
+  var a=['쌍방 신호 5개 중 <b>'+on+'개가 보여요</b>.'];
+  var spd=Y.avg>M.avg+2?'상대는 천천히':(Y.avg+2<M.avg?'상대는 빠르게':'둘 다 비슷한 속도로');
+  var ln=Y.len<M.len*0.8?' 짧게':(Y.len>M.len*1.2?' 길게':'');
+  a.push((Y.avg>M.avg+2?'나는 빠르게, ':'')+spd+ln+' 답하는 편이에요.');
+  if(Y.qr>M.qr)a.push('질문은 상대가 더 많이 해요.');
+  a.push('쌍방 신호는 '+r.score+'점으로 '+band+'.');
+  r.summary=a.join(' ');
+
+  var ban=nameVars(me).concat(nameVars(you)).filter(function(b){return b.length>=2});
+  r.kw=keywords(st.you.texts,ban);
+  var Ys=st.you,tn=Math.max(1,Ys.textN),chips=[];
+  if(Y.len<15)chips.push('짧게 끊어 보내요');else if(Y.len>30)chips.push('길게 풀어서 보내요');
+  if(Ys.hh/tn>0.12)chips.push('ㅎㅎ를 자주 써요');if(Ys.kk/tn>0.12)chips.push('ㅋㅋ를 자주 써요');
+  chips.push(Ys.polite/tn>0.5?'존댓말을 유지해요':'반말이 편한 사이예요');
+  if(Ys.qEnd/tn>0.15)chips.push('질문으로 말을 맺어요');
+  if(Ys.emo/Math.max(1,Ys.n)>0.05)chips.push('이모티콘을 자주 써요');
+  if(Ys.tilde/tn>0.1)chips.push('물결(~)을 자주 붙여요');
+  r.chips=chips;
+  var avgLen=Y.len||1;
+  r.care=r.kw.slice(0,3).map(function(k){var l=mean(Ys.texts.filter(function(t){return t.indexOf(k[0])>=0}).map(function(t){return t.length}))||avgLen;return {title:k[0]+' 이야기',body:'상대가 '+k[1]+'번 꺼낸 주제예요. 이 얘기를 할 때 메시지 길이가 평소의 '+(l/avgLen).toFixed(1)+'배예요.'}});
+
+  r.pairs=buildPairs(list,me);
+  r.style=styleOf(r,me,you);
+  r.deep=deepMetrics(r,sessions,me);
+  r.excerpt=excerpt(list,me,14000);
+  r.longExcerpt=excerpt(list,me,40000);
+  r.tail=list.slice(-160).filter(function(m){return m.text.trim()}).map(function(m){return {w:m.who===me?'me':'you',x:mask(m.text.trim()).slice(0,300),t:m.t}});
+  return r;
+}
+
+/* conversation turns: my run -> their run (for retrieval of real replies) */
+function buildPairs(list,me){
+  var GAP=3*3600e3,pairs=[],cur=null,prev=null;
+  list.forEach(function(m){
+    var t=m.text.trim();if(!t)return;
+    var mine=m.who===me,brk=prev&&m.t-prev.t>GAP;
+    if(mine){if(!cur||cur.y.length||brk){cur={m:[],y:[],t:m.t};pairs.push(cur)}cur.m.push(mask(t).slice(0,160))}
+    else if(cur&&!brk&&cur.m.length){if(cur.y.length<8)cur.y.push(mask(t).slice(0,160))}
+    else{cur={m:[],y:[mask(t).slice(0,160)],t:m.t};pairs.push(cur)}
+    prev=m;
+  });
+  return pairs.filter(function(p){return p.y.length}).slice(-600);
+}
+
+function styleOf(r,me,you){
+  var Ys=r.st.you,tn=Math.max(1,Ys.textN),texts=Ys.texts;
+  var withMe=r.pairs.filter(function(p){return p.m.length&&p.y.length});
+  var bub=withMe.map(function(p){return p.y.length}),bpt=mean(bub)||1;
+  var counts={};bub.forEach(function(b){counts[b]=(counts[b]||0)+1});
+  var mode=+Object.keys(counts).sort(function(a,b){return counts[b]-counts[a]})[0]||1;
+  function runs(ch){var a=[];texts.forEach(function(t){var m=t.match(new RegExp(ch+'{2,}','g'));if(m)m.forEach(function(x){a.push(x.length)})});return a}
+  var kr=runs('ㅋ'),hr=runs('ㅎ');
+  var ends={};texts.forEach(function(t){var s=t.replace(/[ㅋㅎㅠㅜ~!?.^;\s]+$/,'');if(s.length<2)return;var e=s.slice(-2);if(/[가-힣]{2}/.test(e))ends[e]=(ends[e]||0)+1});
+  var topEnds=Object.keys(ends).sort(function(a,b){return ends[b]-ends[a]}).slice(0,10);
+  var whole={};texts.forEach(function(t){if(t.length<=12)whole[t]=(whole[t]||0)+1});
+  var stock=Object.keys(whole).filter(function(k){return whole[k]>=2}).sort(function(a,b){return whole[b]-whole[a]}).slice(0,12);
+  var addr={};nameVars(me).forEach(function(v){if(v.length<2)return;texts.forEach(function(t){var re=new RegExp(v+'(님|씨|아|야|이|쓰|ㅇ)?','g'),m;while((m=re.exec(t))){var k=m[0];addr[k]=(addr[k]||0)+1}})});
+  ['자기','자기야','애기','너','당신','쌤'].forEach(function(w){var c=texts.filter(function(t){return new RegExp('(^|\\s)'+w+'(\\s|$|야|는|가|도|랑)').test(t)}).length;if(c>=2)addr[w]=c});
+  var addrTop=Object.keys(addr).sort(function(a,b){return addr[b]-addr[a]}).slice(0,3);
+  return {
+    bpt:+bpt.toFixed(1),mode:mode,len:Math.round(r.Y.len),period:Math.round(Ys.period/tn*100),q:Math.round(Ys.qEnd/tn*100),
+    tilde:Math.round(Ys.tilde/tn*100),polite:Math.round(Ys.polite/tn*100),ell:Math.round(Ys.ell/tn*100),
+    emo:Math.round(Ys.emo/Math.max(1,Ys.n)*100),kk:Math.round(Ys.kk/tn*100),hh:Math.round(Ys.hh/tn*100),
+    kRun:kr.length?Math.round(mean(kr)):0,hRun:hr.length?Math.round(mean(hr)):0,
+    ends:topEnds,stock:stock,addr:addrTop,avgReply:Math.round(r.Y.avg)
+  };
+}
+function styleLines(s){
+  var laugh=[];
+  if(s.kk>3)laugh.push('ㅋ 계열을 메시지의 '+s.kk+'%에서 씀(보통 ㅋ '+s.kRun+'개)');
+  if(s.hh>3)laugh.push('ㅎ 계열을 메시지의 '+s.hh+'%에서 씀(보통 ㅎ '+s.hRun+'개)');
+  if(!laugh.length)laugh.push('ㅋ/ㅎ를 거의 안 씀');
+  return [
+    '- 나의 메시지에 한 번 답할 때 보내는 말풍선 수: 평균 '+s.bpt+'개 (가장 흔한 건 '+s.mode+'개)',
+    '- 말풍선 하나 평균 길이: '+s.len+'자',
+    '- 존댓말로 끝나는 비율: '+s.polite+'%',
+    '- 마침표로 끝내는 비율: '+s.period+'% / 물음표로 끝: '+s.q+'% / 물결(~) 사용: '+s.tilde+'% / 말줄임(..): '+s.ell+'%',
+    '- 웃음: '+laugh.join(', '),
+    '- 이모티콘만 보내는 비율: '+s.emo+'%',
+    '- 나를 부르는 말: '+(s.addr.length?s.addr.join(', '):'이름을 거의 안 부름'),
+    '- 자주 쓰는 문장 끝(어미): '+(s.ends.join(', ')||'-'),
+    '- 자주 보내는 짧은 말 그대로: '+(s.stock.join(' / ')||'-')
+  ].join('\n');
+}
+
+function deepMetrics(r,sessions,me){
+  var yr=r.st.you.replyT,buckets=[],span=(r.list[r.list.length-1].t-r.list[0].t)/864e5;
+  var size=span>28?7:(span>10?3:1),start=r.list[0].t;
+  yr.forEach(function(o){var b=Math.floor((o.t-start)/(size*864e5));(buckets[b]=buckets[b]||[]).push(o.d)});
+  var trend=[];buckets.forEach(function(a,i){if(a&&a.length){var d=new Date(start+i*size*864e5);trend.push({l:(d.getMonth()+1)+'/'+d.getDate(),v:mean(a)})}});
+  trend=trend.slice(-10);
+  var dir='일정한 편';
+  if(trend.length>=4){var h=Math.floor(trend.length/2),f=mean(trend.slice(0,h).map(function(x){return x.v})),l=mean(trend.slice(-h).map(function(x){return x.v}));if(l<f*0.8)dir='점점 빨라지는 중';else if(l>f*1.25)dir='점점 느려지는 중'}
+  var askQ=0,askBack=0;r.pairs.forEach(function(p){if(p.m.some(isQ)&&p.y.length){askQ++;if(p.y.some(isQ))askBack++}});
+  var follow=0;for(var i=1;i<r.list.length;i++){var a=r.list[i-1],b=r.list[i];if(a.who!==me&&b.who!==me&&b.t-a.t>=20*60000)follow++}
+  var endMe=0,endYou=0;sessions.forEach(function(s){if(!s.length)return;if(s[s.length-1].who===me)endMe++;else endYou++});
+  var half=Math.floor(r.st.you.texts.length/2),t1=r.st.you.texts.slice(0,half),t2=r.st.you.texts.slice(half);
+  var l1=mean(t1.map(function(t){return t.length}))||0,l2=mean(t2.map(function(t){return t.length}))||0;
+  return {trend:trend,trendDir:dir,bucket:size,askBack:askQ?Math.round(askBack/askQ*100):0,askQ:askQ,follow:follow,
+    endYou:sessions.length?Math.round(endYou/sessions.length*100):0,sessions:sessions.length,
+    night:Math.round(r.st.you.night/Math.max(1,r.st.you.n)*100),lenChange:l1?Math.round((l2-l1)/l1*100):0};
+}
+
+/* ---------- Claude (sample capability) ---------- */
+var USER=null,ENT=null;
+function hashStr(s){var h1=0xdeadbeef,h2=0x41c6ce57;for(var i=0;i<s.length;i++){var c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);return (h2>>>0).toString(36)+(h1>>>0).toString(36)}
+async function api(kind,data,useCache){
+  var key=useCache?'ai:'+kind+':'+hashStr(JSON.stringify(data)):null;
+  if(key){try{var c=sessionStorage.getItem(key);if(c)return JSON.parse(c)}catch(e){}}
+  try{
+    var r=await fetch('/api/ai',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({kind:kind,data:data})});
+    var j=await r.json().catch(function(){return {error:'upstream_error'}});
+    if(j.chat&&ENT)ENT.chat=j.chat;
+    if(!r.ok||j.error){if(j.error==='login_required'){USER=null;ENT=null;renderAuth()}return {error:j.error||'upstream_error'}}
+    if(key){try{sessionStorage.setItem(key,JSON.stringify(j))}catch(e){}}
+    return j;
+  }catch(e){return {error:'network'}}
+}
+async function refreshMe(){
+  try{var r=await fetch('/api/me',{credentials:'same-origin'});var j=await r.json();USER=j.user||null;ENT=j.user?{paid:!!j.paid,paidUntil:j.paidUntil,chat:j.chat}:null}catch(e){}
+  renderAuth();
+}
+function errCopy(code){return {login_required:'로그인이 풀렸어요. 다시 로그인해 주세요.',daily_limit:'오늘 분석 한도를 다 썼어요. 내일 다시 시도해 주세요.',not_paid:'속마음 열기 결제 후에 볼 수 있어요.',quota:'오늘 채팅 횟수를 다 썼어요.',network:'인터넷 연결을 확인한 뒤 다시 시도해 주세요.',invalid_json:'까비가 답을 정리하지 못했어요. 다시 시도해 주세요.',rate_limited:'지금 이용자가 많아요. 잠시 뒤에 다시 시도해 주세요.',prompt_too_large:'대화가 너무 길어요. 최근 몇 달 대화만 내보내서 올려 주세요.',server_config:'서비스 설정을 점검 중이에요. 잠시 뒤에 다시 시도해 주세요.'}[code]||'까비가 잠깐 길을 잃었어요. 다시 시도해 주세요.'}
+function statsForAI(r){
+  return JSON.stringify({답장속도_분:{나:+r.M.avg.toFixed(1),상대:+r.Y.avg.toFixed(1)},먼저연락비율:{나:Math.round(r.M.init*100),상대:Math.round(r.Y.init*100)},
+    평균길이_자:{나:Math.round(r.M.len),상대:Math.round(r.Y.len)},질문비율:{나:Math.round(r.M.qr*100),상대:Math.round(r.Y.qr*100)},
+    시간대별_상대답장_분_아침낮저녁심야:r.Y.slots.map(function(v){return v==null?null:Math.round(v)}),
+    신호:r.sig.map(function(s){return s.t+':'+['없음','애매','있음'][s.v]}),점수:r.score,
+    정밀:{답장속도추이:r.deep.trendDir,되묻기율:r.deep.askBack+'%',상대가_답없는데_또_보낸_횟수:r.deep.follow,상대가_대화를_마무리한_비율:r.deep.endYou+'%',상대_심야메시지비율:r.deep.night+'%',상대_메시지길이변화:r.deep.lenChange+'%'}});
+}
+var BASE_UNUSED='너는 카카오톡 대화 패턴으로 썸·짝사랑 관계를 읽어 주는 서비스 "속까마귀"의 분석가 까비야. 아래 대화에서 "나"는 서비스 이용자, "상대"는 그 사람이야(전화번호·주소 등은 가려져 있어). 한국어 해요체로, 따뜻하지만 냉정하게, 아주 구체적으로 써. 대화에 실제로 나온 내용과 수치만 근거로 삼고, 모르는 건 단정하지 말고 "~로 보여요"처럼 추정으로 말해. 듣기 좋은 말만 하지 말고 불리한 신호도 솔직하게 짚어.';
+
+async function aiFree(r){
+  var j=await api('free',{stats:statsForAI(r),excerpt:r.excerpt,style:r.style,ymbti:r.ymbti,mmbti:r.mmbti},true);
+  return j.error?j:j.result;
+}
+async function aiPersona(r){
+  var spread=[],ys=r.st.you.texts,step=Math.max(1,Math.floor(ys.length/150));
+  for(var i=0;i<ys.length;i+=step)spread.push(mask(ys[i]).slice(0,140));
+  var j=await api('persona',{style:r.style,spread:spread,longExcerpt:r.longExcerpt.slice(-30000),ymbti:r.ymbti,mmbti:r.mmbti},true);
+  return j.error?j:j.result;
+}
+async function aiDeep(r){
+  var j=await api('deep',{stats:statsForAI(r),style:r.style,longExcerpt:r.longExcerpt,ymbti:r.ymbti,mmbti:r.mmbti},true);
+  return j.error?j:j.result;
+}
+
+/* ---------- report rendering ---------- */
+function fmtMin(v){if(v==null)return '–';if(v<1)return '1분 미만';return Math.round(v)+'분'}
+function pct(v){return Math.round(v*100)+'%'}
+function pairRows(label,a,b,fa,note){
+  var mx=Math.max(a||0,b||0)||1;
+  return '<div class="metric"><div class="m-label">'+label+'</div>'+
+    '<div class="m-row"><span class="who me">나</span><div class="bar me"><i style="width:'+Math.max(4,(a||0)/mx*100)+'%"></i></div><b>'+fa(a)+'</b></div>'+
+    '<div class="m-row"><span class="who you">상대</span><div class="bar you"><i style="width:'+Math.max(4,(b||0)/mx*100)+'%"></i></div><b>'+fa(b)+'</b></div>'+
+    (note?'<p class="m-note">'+note+'</p>':'')+'</div>';
+}
+function renderNoData(r){
+  var got=['올린 대화 약 '+Math.max(1,r.activeDays||1)+'일치','상대 메시지 '+(r.st?r.st.you.n:0)+'개'];
+  $('#report-out').innerHTML='<article class="sheet"><div class="nodata"><div class="q-plate" aria-hidden="true">?</div>'+
+    '<h3>상대와의 대화 패턴이 현재 분석되지 않습니다</h3><p>조금 더 가능한 더 많은 채팅과 이야기를 담아서 올려주세요.</p>'+
+    '<div class="got">'+got.map(function(g){return '<span>'+esc(g)+'</span>'}).join('')+'</div>'+
+    '<div class="howto"><h4>이렇게 올리면 더 정확해요</h4><ul><li>이틀 이상 이어진 대화를 올려 주세요</li><li>상대가 직접 보낸 메시지가 30개 이상 담기게 해 주세요</li><li>여러 날의 대화를 한 파일로 내보내 주세요</li></ul></div>'+
+    '<p class="free-note">분석이 안 된 경우에는 결제가 진행되지 않아요. 파일을 다시 올려 주세요.</p>'+
+    '<button class="btn btn-gold" type="button" id="reup-go">대화 다시 올리기</button></div></article>';
+  $('#reup-go').onclick=resetUpload;
+}
+function renderReport(r){
+  var M=r.M,Y=r.Y;
+  var sigIc=['<span class="si off">–</span>','<span class="si mid">?</span>','<span class="si on">✓</span>'],sigTx=['아직 적어요','애매해요','있어요'];
+  var vals=M.slots.concat(Y.slots).filter(function(v){return v!=null}),mx=Math.max.apply(null,vals.concat([1]));
+  function col(v,cls){return '<div class="col '+cls+'"><span>'+(v==null?'–':Math.round(v))+'</span><i style="height:'+(v==null?0:Math.max(4,Math.round(v/mx*106)))+'px"></i></div>'}
+  var ys=Y.slots.filter(function(v){return v!=null}),slow=Y.slots.indexOf(Math.max.apply(null,ys)),fast=Y.slots.indexOf(Math.min.apply(null,ys)),SL=['아침','낮','저녁','심야'];
+  var kwMax=r.kw.length?r.kw[0][1]:1;
+  $('#report-out').innerHTML=
+  '<article class="sheet">'+
+   '<div class="sheet-top"><svg class="ic" viewBox="0 0 48 48" aria-hidden="true"><use href="#mark"/></svg><h3>까비의 대화 리포트</h3><span class="tag">상대 · <span class="js-yname">'+esc(r.yname)+'</span>'+(r.ymbti?' · '+esc(r.ymbti):'')+'</span></div>'+
+   '<div class="score-row"><div class="ring" style="--p:'+r.score+'" role="img" aria-label="쌍방 신호 '+r.score+'점"><b>'+r.score+'</b></div>'+
+     '<div><div class="cs-lab">쌍방 신호</div><div class="cs-type" id="ai-type">'+esc(r.type)+'</div><p class="cs-quote" id="ai-quote" hidden></p></div></div>'+
+   '<p class="summary" id="ai-summary">'+r.summary+'</p>'+
+   '<div class="mbti-note" id="ai-mbti" hidden></div>'+
+   '<p class="ai-line" id="ai-line"><i></i>까비가 말투와 맥락을 더 읽는 중이에요…</p>'+
+   '<div class="sheet-grid"><div>'+
+    '<section class="blk"><h4>쌍방 신호 체크</h4><p class="sub">마음이 같은 방향일 때 자주 나타나는 5가지</p><ul class="sigs">'+r.sig.map(function(s){return '<li>'+sigIc[s.v]+'<span>'+s.t+'</span><em>'+sigTx[s.v]+'</em></li>'}).join('')+'</ul></section>'+
+    '<section class="blk"><h4>나와 상대, 이렇게 달라요</h4><p class="sub">올린 대화 '+r.activeDays+'일치 · 메시지 '+r.total.toLocaleString()+'개 기준</p>'+
+     '<div class="legend"><span><i class="dot me"></i>나</span><span><i class="dot you"></i>상대</span></div>'+
+     pairRows('평균 답장 속도',M.avg,Y.avg,fmtMin,Y.avg>M.avg+1?'상대가 평균 '+Math.round(Y.avg-M.avg)+'분 늦게 답해요.':(M.avg>Y.avg+1?'상대가 평균 '+Math.round(M.avg-Y.avg)+'분 빨리 답해요.':'둘의 답장 속도가 거의 같아요.'))+
+     pairRows('먼저 연락한 비율',M.init,Y.init,pct,M.init>=0.6?'대화를 먼저 여는 쪽은 주로 나예요.':(Y.init>=0.6?'대화를 먼저 여는 쪽은 주로 상대예요.':'먼저 연락하는 쪽이 고르게 섞여 있어요.'))+
+     pairRows('메시지 한 개당 평균 길이',M.len,Y.len,function(v){return Math.round(v)+'자'},Y.len<M.len*0.7?'상대는 짧게 자주 끊어 보내는 편이에요.':'')+
+     pairRows('질문이 들어간 메시지 비율',M.qr,Y.qr,pct,Y.qr>M.qr?'상대가 질문을 더 많이 해요. 대화를 이어 가려는 패턴으로 볼 수 있어요.':'')+
+     pairRows('하루 평균 메시지 수',M.perDay,Y.perDay,function(v){return Math.round(v)+'개'},'')+
+    '</section></div><div>'+
+    '<section class="blk"><h4>시간대별 평균 답장 속도</h4><p class="sub">막대가 낮을수록 빨리 답해요 (단위: 분)</p>'+
+     '<div class="tchart" role="img" aria-label="시간대별 평균 답장 속도">'+[0,1,2,3].map(function(i){return '<div class="slot">'+col(M.slots[i],'me')+col(Y.slots[i],'you')+'</div>'}).join('')+'</div>'+
+     '<div class="tlabels"><span><b>아침</b>6–11시</span><span><b>낮</b>11–18시</span><span><b>저녁</b>18–23시</span><span><b>심야</b>23–6시</span></div>'+
+     (slow!==fast&&slow>=0?'<p class="unit-note">상대는 '+SL[slow]+'에 가장 느리고 '+SL[fast]+'에 가장 빨라요.</p>':'')+'</section>'+
+    (r.kw.length?'<section class="blk"><h4>상대가 자주 꺼내는 이야기</h4><p class="sub">상대 메시지에서 많이 나온 단어 (메시지 수)</p><ul class="kw">'+r.kw.map(function(k){return '<li><span>'+esc(k[0])+'</span><div class="bar"><i style="width:'+Math.round(k[1]/kwMax*100)+'%"></i></div><b>'+k[1]+'</b></li>'}).join('')+'</ul></section>':'')+
+    '<section class="blk"><h4>상대가 중요하게 보는 것</h4><p class="sub">대화 흐름에서 읽히는 요약</p><ul class="care" id="ai-care">'+(r.care.length?r.care.map(function(c){return '<li><strong>'+esc(c.title)+'</strong><span>'+esc(c.body)+'</span></li>'}).join(''):'<li><span>까비가 읽는 중이에요.</span></li>')+'</ul></section>'+
+    '<section class="blk"><h4>상대의 말투</h4><p class="sub">자주 보이는 습관</p><ul class="chips">'+r.chips.map(function(c){return '<li>'+esc(c)+'</li>'}).join('')+'</ul></section>'+
+   '</div></div><div id="secret-slot"></div></article>';
+  renderSecretSlot();
+  aiFree(r).then(function(j){
+    if(DATA!==r)return;var line=$('#ai-line');
+    if(!j||j.error){line.innerHTML=esc(errCopy(j&&j.error))+' 기본 분석은 위에 그대로 있어요.';return}
+    line.hidden=true;
+    if(j.type){$('#ai-type').textContent=String(j.type).slice(0,14);r.type=j.type}
+    if(j.quote){var q=$('#ai-quote');q.textContent='“'+String(j.quote).replace(/^["“]|["”]$/g,'')+'”';q.hidden=false}
+    if(j.summary)$('#ai-summary').innerHTML='쌍방 신호 5개 중 <b>'+r.on+'개가 보여요</b>. '+esc(j.summary);
+    if(j.mbti_note&&r.ymbti){var mb=$('#ai-mbti');mb.innerHTML='<b>'+esc(r.ymbti)+'</b>MBTI와 실제 대화<p>'+esc(j.mbti_note)+'</p>';mb.hidden=false}
+    if(Array.isArray(j.care)&&j.care.length){r.care=j.care.slice(0,3);$('#ai-care').innerHTML=r.care.map(function(c){return '<li><strong>'+esc(c.title)+'</strong><span>'+esc(c.body)+'</span></li>'}).join('')}
+  });
+}
+
+/* deep (paid) */
+function localDeepHTML(r){
+  var d=r.deep,mx=Math.max.apply(null,d.trend.map(function(x){return x.v}).concat([1]));
+  var unit=d.bucket===1?'일별':(d.bucket+'일 단위');
+  return '<section class="blk"><h4>상대 답장 속도 추이</h4><p class="sub">'+unit+' 평균 (분) · 막대가 낮아질수록 빨라진 거예요</p>'+
+    (d.trend.length>=2?'<div class="trend" role="img" aria-label="답장 속도 추이">'+d.trend.map(function(x){return '<div><span>'+Math.round(x.v)+'</span><i style="height:'+Math.max(4,Math.round(x.v/mx*90))+'px"></i></div>'}).join('')+'</div><div class="trend-l">'+d.trend.map(function(x){return '<span>'+x.l+'</span>'}).join('')+'</div>':'<p class="sub">기간이 짧아 추이를 그리기 어려워요.</p>')+
+    '<span class="trend-tag">'+d.trendDir+'</span></section>'+
+    '<section class="blk"><h4>정밀 지표</h4><p class="sub">대화 전체에서 직접 센 숫자예요</p><div class="mgrid">'+
+     '<div class="mcell"><b>'+d.askBack+'%</b><span>내 질문에 답하고 되물어 준 비율 ('+d.askQ+'번 중)</span></div>'+
+     '<div class="mcell"><b>'+d.follow+'번</b><span>내 답 없이 상대가 또 보낸 횟수</span></div>'+
+     '<div class="mcell"><b>'+d.endYou+'%</b><span>상대 말로 대화가 끝난 비율</span></div>'+
+     '<div class="mcell"><b>'+d.night+'%</b><span>상대 메시지 중 밤 11시~새벽 3시</span></div>'+
+     '<div class="mcell"><b>'+(d.lenChange>0?'+':'')+d.lenChange+'%</b><span>초반 대비 최근 상대 메시지 길이</span></div>'+
+     '<div class="mcell"><b>'+d.sessions+'번</b><span>나눈 대화(3시간 이상 끊기면 새 대화)</span></div>'+
+    '</div></section>';
+}
+function quoteOk(q){if(!q||!DATA)return false;var k=String(q).replace(/\s+/g,'').slice(0,10);if(k.length<2)return false;return DATA.list.some(function(m){return m.text.replace(/\s+/g,'').indexOf(k)>=0})}
+function deepHTML(j,r){
+  var t=Math.max(0,Math.min(100,Math.round(+j.temperature||0)));
+  var moments=(j.moments||[]).filter(function(m){return quoteOk(m.quote)}).slice(0,3);
+  var cooling=(j.cooling||[]).filter(function(m){return quoteOk(m.quote)}).slice(0,2);
+  function li(arr,f){return (arr||[]).map(f).join('')}
+  return '<section class="deep" aria-labelledby="deep-h"><div class="deep-head"><h3 id="deep-h">까비의 정밀 분석</h3><span>속마음 열기</span></div>'+
+   '<div class="temp"><div class="thermo" style="--p:'+t+'" role="img" aria-label="호감 온도 '+t+'도"><b>'+t+'<small>°</small></b></div><div><div class="temp-label">'+esc(j.temperature_label||'호감 온도')+'</div><p>'+esc(j.verdict||'')+'</p></div></div>'+
+   '<div class="deep-grid"><div>'+
+    (moments.length?'<section class="blk"><h4>결정적 순간</h4><p class="sub">호감이 드러난 실제 대화</p><ol class="moments">'+li(moments,function(m){return '<li><time>'+esc(m.date||'')+'</time>'+(m.context?'<q class="mine">'+esc(m.context)+'</q>':'')+'<q>'+esc(m.quote)+'</q><p>'+esc(m.why||'')+'</p></li>'})+'</ol></section>':'')+
+    (cooling.length?'<section class="blk"><h4>온도가 내려간 순간</h4><p class="sub">놓치면 안 되는 신호</p><ol class="moments">'+li(cooling,function(m){return '<li class="cool"><time>'+esc(m.date||'')+'</time><q>'+esc(m.quote)+'</q><p>'+esc(m.why||'')+'</p></li>'})+'</ol></section>':'')+
+    '<section class="blk"><h4>관심 신호, 근거와 함께</h4><ul class="ev">'+li(j.signals,function(s){return '<li><strong>'+esc(s.title)+'</strong><span>'+esc(s.evidence)+'</span></li>'})+'</ul></section>'+
+    '<section class="blk prose"><h4>답장 타이밍이 말해 주는 것</h4><p>'+esc(j.reply_pattern||'')+'</p></section>'+
+    '<section class="blk prose"><h4>상대의 연애 성향</h4><p>'+esc(j.style||'')+'</p></section>'+
+   '</div><div>'+localDeepHTML(r)+
+    '<section class="blk"><h4>까비만 아는 속마음 3가지</h4><ol class="secrets">'+li(j.secrets,function(s){return '<li><strong>'+esc(s.title)+'</strong><span>'+esc(s.body)+'</span></li>'})+'</ol></section>'+
+   '</div></div>'+
+   '<div class="deep-grid"><section class="blk"><h4>이렇게 보내 보세요</h4><p class="sub">상대 반응까지 예상해 봤어요</p><ul class="sends">'+li(j.send,function(s,i){return '<li><span class="say">'+esc(s.message)+'</span><p>'+esc(s.why)+'</p><div class="row-btns"><button class="btn btn-ghost" type="button" data-try="'+i+'">이 말로 AI와 연습하기</button></div></li>'})+'</ul></section>'+
+    '<section class="blk"><h4>이건 피하세요</h4><ul class="donts">'+li(j.dont,function(s){return '<li><strong>'+esc(s.what)+'</strong>'+esc(s.why)+'</li>'})+'</ul></section></div>'+
+   (j.next_step?'<div class="next"><h4>다음 단계</h4><p>'+esc(j.next_step)+'</p></div>':'')+
+   (j.mbti_tip&&r.ymbti?'<div class="mbti-note"><b>'+esc(r.ymbti)+'</b>MBTI 공략<p>'+esc(j.mbti_tip)+'</p></div>':'')+
+   '<p class="note-sm">대화 패턴을 바탕으로 한 AI의 추정이에요. 실제 상대의 생각과 다를 수 있어요.</p></section>';
+}
+function renderSecretSlot(){
+  var slot=$('#secret-slot');if(!slot||!DATA)return;
+  if(!(ENT&&ENT.paid)){
+    slot.innerHTML='<div class="locked"><h4>까비의 정밀 분석 · 속마음 열기</h4><div class="blur" aria-hidden="true"><p>호감 온도 74° · 결정적 순간 3개를 실제 대화와 함께 보여 드려요.</p><p>답장이 늦어지는 날의 진짜 이유와 상대가 기다리는 것이 있어요.</p><p>다음에 보내면 좋은 말 3개와 피해야 할 말, 약속 잡기 좋은 타이밍.</p></div>'+
+      '<div class="lock-cover"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><p>이 사람 속마음, 궁금하죠?</p>'+
+      '<ul class="lock-list"><li>호감 온도와 결정적 순간</li><li>답장 속도 추이·되묻기율 등 정밀 지표</li><li>까비만 아는 속마음 3가지</li><li>보낼 말 추천 + AI와 하루 15번 채팅</li></ul>'+
+      '<button class="btn btn-gold btn-sm" type="button" data-pay>2,900원으로 열기</button></div></div>';
+    return;
+  }
+  if(DATA.deepAI){slot.innerHTML=deepHTML(DATA.deepAI,DATA);return}
+  slot.innerHTML='<section class="deep"><div class="deep-head"><h3>까비의 정밀 분석</h3><span>속마음 열기</span></div><p class="ai-line"><i></i>대화 전체를 처음부터 다시 읽는 중이에요. 1분 정도 걸릴 수 있어요…</p>'+localDeepHTML(DATA)+'</section>';
+  var r=DATA;
+  aiDeep(r).then(function(j){
+    if(DATA!==r)return;
+    if(j&&!j.error&&(j.verdict||j.secrets)){r.deepAI=j;slot.innerHTML=deepHTML(j,r)}
+    else{slot.innerHTML='<section class="deep"><div class="deep-head"><h3>까비의 정밀 분석</h3></div><p>'+esc(errCopy(j&&j.error))+'</p><div class="row-btns"><button class="btn btn-gold btn-sm" type="button" id="deep-retry">다시 시도</button></div>'+localDeepHTML(r)+'</section>';$('#deep-retry').onclick=renderSecretSlot}
+  });
+}
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-try]');if(!b||!DATA||!DATA.deepAI)return;
+  var s=(DATA.deepAI.send||[])[+b.dataset.try];if(!s)return;
+  PREFILL=s.message;location.hash='talk';
+});
+
+/* ---------- pay (demo) ---------- */
+document.addEventListener('click',function(e){var b=e.target.closest('[data-pay]');if(!b)return;if(!USER){openLogin();return}$('#pay-err').textContent='';openDlg(pay)});
+function loadToss(){return new Promise(function(ok,no){if(window.TossPayments)return ok();var s=document.createElement('script');s.src='https://js.tosspayments.com/v2/standard';s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
+$('#pay-go').onclick=async function(){
+  var b=this;b.disabled=true;b.textContent='결제창 여는 중…';$('#pay-err').textContent='';
+  try{
+    saveRestore();
+    var r=await fetch('/api/pay/order',{method:'POST',credentials:'same-origin'});var o=await r.json();
+    if(!r.ok)throw {code:o.error};
+    await loadToss();
+    var payment=window.TossPayments(o.clientKey).payment({customerKey:o.customerKey});
+    await payment.requestPayment({method:'CARD',amount:{currency:'KRW',value:o.amount},orderId:o.orderId,orderName:o.orderName,customerName:o.customerName,
+      successUrl:location.origin+'/api/pay/confirm',failUrl:location.origin+'/?pay=fail#app'});
+  }catch(e){
+    $('#pay-err').textContent=e&&e.code==='USER_CANCEL'?'결제를 취소했어요.':(e&&e.code==='login_required'?'로그인이 풀렸어요. 다시 로그인해 주세요.':'결제창을 열지 못했어요. 잠시 뒤에 다시 시도해 주세요.');
+  }
+  b.disabled=false;b.textContent='결제하기';
+};
+
+/* ---------- upload flow ---------- */
+var PARSED=null,DATA=null,PREFILL='',nameEdited=false,LASTRAW='',LASTLABEL='';
+function upErr(t){$('#up-err').textContent=t||''}
+function resetUpload(){PARSED=null;DATA=null;$('#pick').hidden=true;$('#file-in').value='';upErr('');$('#talk-cta').hidden=true;show('upload')}
+function otherOf(me){return PARSED.people[0]===me?PARSED.people[1]:PARSED.people[0]}
+function ingest(text,label,meGuess){
+  upErr('');LASTRAW=text||'';LASTLABEL=label||'';
+  var msgs=parseChat(text||'');
+  if(msgs.length<2){upErr('카카오톡 대화 형식을 찾지 못했어요. 카카오톡의 "대화 내보내기"로 저장한 파일인지 확인해 주세요.');$('#pick').hidden=true;return}
+  var cnt={};msgs.forEach(function(m){cnt[m.who]=(cnt[m.who]||0)+1});
+  var people=Object.keys(cnt).sort(function(a,b){return cnt[b]-cnt[a]});
+  if(people.length<2){upErr('한 사람의 메시지만 있어요. 그 사람과 주고받은 대화를 올려 주세요.');return}
+  PARSED={msgs:msgs,people:people.slice(0,2),cnt:cnt};
+  var meta=[esc(label),'메시지 '+msgs.length.toLocaleString()+'개'];if(people.length>2)meta.push('단체방이라 두 사람만 분석해요');
+  $('#file-meta').innerHTML=meta.map(function(m){return '<span>'+m+'</span>'}).join('');
+  var guess=meGuess||(USER&&PARSED.people.indexOf(USER.nick)>=0?USER.nick:PARSED.people[0]);
+  $('#pick-list').innerHTML=PARSED.people.map(function(p,i){return '<label><input type="radio" name="me" id="me-'+i+'" value="'+esc(p)+'"'+(p===guess?' checked':'')+'><b>'+esc(p)+'</b><small>'+cnt[p].toLocaleString()+'개</small></label>'}).join('');
+  nameEdited=false;$('#you-name').value=otherOf(guess);
+  $('#pick').hidden=false;$('#pick').scrollIntoView({behavior:RM?'auto':'smooth',block:'nearest'});
+}
+$('#pick-list').addEventListener('change',function(e){if(e.target.name==='me'&&!nameEdited&&PARSED)$('#you-name').value=otherOf(e.target.value)});
+$('#you-name').addEventListener('input',function(){nameEdited=true});
+function readFile(f){
+  if(!f)return;if(f.size>30*1024*1024){upErr('파일이 너무 커요. 30MB 이하로 올려 주세요.');return}
+  var rd=new FileReader();
+  rd.onload=function(){var t=String(rd.result||'');if(/\uFFFD/.test(t.slice(0,2000))){var r2=new FileReader();r2.onload=function(){ingest(String(r2.result||''),f.name)};r2.readAsText(f,'euc-kr');return}ingest(t,f.name)};
+  rd.onerror=function(){upErr('파일을 읽지 못했어요. 다시 선택해 주세요.')};rd.readAsText(f,'utf-8');
+}
+$('#file-in').addEventListener('change',function(){readFile(this.files[0])});
+var dz=$('#dz');
+['dragenter','dragover'].forEach(function(ev){dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.add('drag')})});
+['dragleave','drop'].forEach(function(ev){dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.remove('drag')})});
+dz.addEventListener('drop',function(e){readFile(e.dataTransfer&&e.dataTransfer.files[0])});
+$('#paste-go').onclick=function(){ingest($('#paste-in').value,'붙여넣은 대화')};
+$('#sample-go').onclick=function(){ingest(sampleChat(),'예시 대화 (지민 · 도윤)','지민')};
+$('#again-go').onclick=function(){resetUpload();goApp()};
+$('#wipe-go').onclick=function(){resetUpload();TK=null;tkSave();LAST=null;try{sessionStorage.clear()}catch(e){}$('#resume-talk').hidden=true;$('#paste-in').value='';upErr('올린 대화, 분석 결과, AI 채팅 기록을 이 기기에서 모두 지웠어요.')};
+
+var LOAD_MSG=['전화번호와 주소를 가리는 중이에요','답장 속도를 재는 중이에요','말투와 어미를 세는 중이에요','속까마귀가 현재 리포트를 물고 당신에게 날아가고 있습니다...'];
+$('#analyze-go').onclick=function(){
+  if(!PARSED)return;
+  var sel=document.querySelector('input[name="me"]:checked');if(!sel){upErr('나를 먼저 골라 주세요.');return}
+  runAnalysis(sel.value,$('#you-name').value.trim(),$('#you-mbti').value,$('#me-mbti').value,false);
+};
+function runAnalysis(me,yname,ymbti,mmbti,instant){
+  var you=otherOf(me);yname=yname||you;
+  LAST={raw:LASTRAW,label:LASTLABEL,me:me,yname:yname,ymbti:ymbti,mmbti:mmbti};
+  try{sessionStorage.setItem('skm-last',JSON.stringify(LAST))}catch(e){}
+  function done(){
+    var r;try{r=analyze(PARSED.msgs,me,you)}catch(e){console.error(e);r={ok:false,activeDays:0}}
+    r.yname=yname;r.ymbti=ymbti;r.mmbti=mmbti;DATA=r;
+    $('#res-meta').textContent=r.ok?('나: '+me+' · 상대: '+yname):'';
+    show('result');
+    if(r.ok){renderReport(r);setYName(yname);startPersona(r)}else{renderNoData(r);$('#talk-cta').hidden=true}
+  }
+  if(instant){done();return}
+  show('loading');goApp();
+  var i=0,lm=$('#load-msg');lm.textContent=LOAD_MSG[0];
+  var tick=setInterval(function(){i=Math.min(i+1,LOAD_MSG.length-1);lm.textContent=LOAD_MSG[i]},800);
+  setTimeout(function(){clearInterval(tick);done()},3200);
+}
+var LAST=null;
+function saveRestore(){if(LAST){LAST.backToTalk=location.hash==='#talk';try{sessionStorage.setItem('skm-last',JSON.stringify(LAST))}catch(e){}}}
+function restore(){
+  var o=null;try{o=JSON.parse(sessionStorage.getItem('skm-last')||'null')}catch(e){}
+  if(!o||!o.raw)return null;
+  ingest(o.raw,o.label,o.me);if(!PARSED)return null;
+  $('#you-name').value=o.yname||'';$('#you-mbti').value=o.ymbti||'';$('#me-mbti').value=o.mmbti||'';
+  runAnalysis(o.me,o.yname,o.ymbti,o.mmbti,true);
+  return o;
+}
+
+/* ---------- persona build & talk state ---------- */
+function startPersona(r){
+  $('#resume-talk').hidden=true;
+  var sig=r.me+'|'+r.you+'|'+r.total+'|'+(r.list.length?r.list[r.list.length-1].t:0);
+  var keep=TK&&TK.sig===sig?TK:null;
+  TK={sig:sig,yname:r.yname,ymbti:r.ymbti,mmbti:r.mmbti,showKabi:keep?keep.showKabi:true,me:r.me,style:r.style,pairs:r.pairs,tail:r.tail,persona:keep?keep.persona:null,log:keep?keep.log:[],chips:r.chips,kw:r.kw.map(function(k){return k[0]}),avgReply:r.Y.avg};
+  tkSave();
+  var cta=$('#talk-cta'),go=$('#talk-go'),stt=$('#persona-status');
+  cta.hidden=false;go.setAttribute('aria-disabled','true');stt.textContent='올린 대화에서 말투와 둘만 아는 이야기를 익히는 중이에요…';
+  var tk=TK;
+  aiPersona(r).then(function(j){
+    if(TK!==tk)return;
+    if(j&&!j.error&&j.speech){tk.persona=j;stt.textContent='말투, 호칭, 둘이 나눈 이야기까지 익혔어요. 진짜 카톡처럼 이어서 말해 보세요.'}
+    else stt.textContent=(j&&j.error?errCopy(j.error)+' ':'')+'계산한 말투 수치만으로 채팅을 열었어요.';
+    tkSave();go.removeAttribute('aria-disabled');
+  });
+}
+function personaText(tk){
+  var p=tk.persona,out=[];
+  if(p){
+    out.push('말씨: '+p.speech,'성격·분위기: '+p.vibe,'호칭: '+(p.address_me||''));
+    if(p.habits)out.push('말투 습관:\n- '+p.habits.join('\n- '));
+    if(p.phrases)out.push('실제로 자주 쓴 표현: '+p.phrases.join(' / '));
+    if(p.facts)out.push('대화로 확인된 사실·둘이 공유한 이야기:\n- '+p.facts.join('\n- '));
+    if(p.reactions)out.push('상황별 반응:\n'+Object.keys(p.reactions).map(function(k){return '- '+({question:'질문받을 때',compliment:'칭찬받을 때',plan:'약속 제안받을 때',late_night:'밤늦게',flirt:'호감 표현받을 때',busy:'바쁘거나 피곤할 때',topic_change:'화제 전환 때',serious:'진지하거나 슬픈 얘기 때'}[k]||k)+': '+p.reactions[k]}).join('\n'));
+    if(p.avoid)out.push('상대가 거의 안 하는 것(하지 마): '+p.avoid.join(' / '));
+    if(p.recent_events&&p.recent_events.length)out.push('최근 있었던 큰일(꼭 기억해):\n- '+p.recent_events.join('\n- '));
+    if(p.relationship)out.push('관계 상태: '+p.relationship);
+    if(p.last_context)out.push('실제 대화가 끝난 지점: '+p.last_context);
+  }else{
+    out.push('말투 특징: '+tk.chips.join(', '),'자주 꺼내는 주제: '+tk.kw.join(', '));
+  }
+  return out.join('\n');
+}
+function grams(s){s=String(s).replace(/[\sㅋㅎㅠㅜ~!?.^]+/g,'');var g={};for(var i=0;i<s.length-1;i++)g[s.substr(i,2)]=1;return g}
+function sim(a,b){var ka=Object.keys(a),kb=Object.keys(b);if(!ka.length||!kb.length)return 0;var n=0;ka.forEach(function(k){if(b[k])n++});return n/Math.sqrt(ka.length*kb.length)}
+/* mood detection: serious / grief context overrides playful habits */
+var GRIEF=/(죽었|죽어서|죽음|돌아가셨|돌아가신|하늘나라|무지개\s?다리|장례|빈소|부고|떠나보|떠나 보|보내줬|보내 줬|세상을 떠|세상 떠|안락사|사망|화장했|추모|명복)/;
+var SERIOUS=/(슬프|슬퍼|슬픈|힘들|힘드|힘든|아프|아팠|아파|병원|수술|입원|울었|울고|울어|눈물|미안|사과|걱정|고민|진지|솔직히|우울|위로|괜찮아\?|괜찮아요\?|괜찮으세요|헤어지|헤어졌|이별|그만하|무서|불안|외로|상처|서운|화났|화나|실망|속상|보고싶|보고 싶|그립|마음이|생각이 많|잠이 안|못 자|정리|후회|사실은|사실 나|할 말|얘기하고 싶|진심)/;
+function moodOf(tk){
+  var sim=tk.log.filter(function(m){return m.w}),mine=sim.filter(function(m){return m.w==='me'}).slice(-3);
+  var simTxt=sim.slice(-10).map(function(m){return m.x}).join('\n');
+  var lastT=tk.tail.length?tk.tail[tk.tail.length-1].t:0;var recentReal=tk.tail.filter(function(m){return m.t>=lastT-4*864e5}).map(function(m){return m.x}).join('\n');
+  var myTxt=mine.map(function(m){return m.x}).join('\n');
+  var grief=GRIEF.test(simTxt)||GRIEF.test(recentReal);
+  var longEarnest=mine.some(function(m){return m.x.length>=40&&!/ㅋ/.test(m.x)});
+  var serious=grief||SERIOUS.test(myTxt)||longEarnest||(/[?？]/.test(myTxt)&&!/[ㅋㅎ]/.test(myTxt)&&myTxt.length>25);
+  var heavyNow=GRIEF.test(simTxt)||GRIEF.test(myTxt);
+  return {grief:grief,serious:serious,heavyNow:heavyNow};
+}
+function hasLaugh(s){return /ㅋ{2,}|ㅎ{2,}|ㅋㅋ|lol|ㅋ$/.test(s)}
+function pickExamples(tk,query,mood){
+  var q=grams(query);
+  var scored=tk.pairs.filter(function(p){return p.m.length}).map(function(p,i){
+    var mj=p.m.join(' '),yj=p.y.join(' '),s=sim(q,grams(mj));
+    if(mood.serious){
+      if(SERIOUS.test(mj)||GRIEF.test(mj))s+=0.5;
+      if(SERIOUS.test(yj)||GRIEF.test(yj))s+=0.3;
+      if(hasLaugh(yj))s-=0.6;
+    }
+    return {p:p,i:i,s:s,laugh:hasLaugh(yj)};
+  });
+  var pool=mood.serious?scored.filter(function(x){return !x.laugh}):scored;
+  var top=pool.slice().sort(function(a,b){return b.s-a.s}).slice(0,14).filter(function(x){return x.s>0.05});
+  var recent=pool.slice(-6),seen={},out=[];
+  top.concat(recent).forEach(function(x){if(!seen[x.i]){seen[x.i]=1;out.push(x)}});
+  out.sort(function(a,b){return a.i-b.i});
+  if(!out.length)return '(해당하는 실제 예시가 적어. 말투 카드와 수치를 참고해.)';
+  return out.slice(0,20).map(function(x){return x.p.m.map(function(m){return '나: '+m}).join('\n')+'\n'+x.p.y.map(function(y){return '상대: '+y}).join('\n')}).join('\n---\n');
+}
+var DOW=['일','월','화','수','목','금','토'];
+function stamp(t){var d=new Date(t);return (d.getMonth()+1)+'/'+d.getDate()+'('+DOW[d.getDay()]+') '+pad(d.getHours())+':'+pad(d.getMinutes())}
+function buildPrompt(tk){
+  var mood=moodOf(tk);
+  var lastMine=tk.log.filter(function(m){return m.w==='me'}).slice(-3).map(function(m){return m.x}).join(' ');
+  var tail=tk.tail.slice(-200).map(function(m){return '['+stamp(m.t)+'] '+(m.w==='me'?'나':'상대')+': '+m.x}).join('\n');
+  var simLog=tk.log.filter(function(m){return m.w}).slice(-40).map(function(m){return '['+stamp(m.t)+'] '+(m.w==='me'?'나':'상대')+': '+m.x}).join('\n');
+  var now=new Date();
+  var moodNote='';
+  if(mood.serious)moodNote='\n\n[⚠ 지금 대화 분위기 경고]\n"나"의 최근 메시지는 진지하거나 감정이 담긴 이야기야.'+
+    (mood.grief?' 그리고 최근 대화에 죽음·이별·상실 이야기가 있어(누가 무엇을 잃었는지 기록에서 정확히 확인해). 상실을 겪은 사람이 상대 본인이라면, 상대는 지금 슬픔 속에 있는 사람이야. 그 마음 상태 그대로 말해.':'')+
+    '\n이번 답장에서는 ㅋㅋ, ㅎㅎ, 장난, 농담, 놀리기, "갑자기 진지하네" 같은 가벼운 반응, 이모티콘을 절대 쓰지 마. 평소 말투(어미, 호칭, 존댓말/반말, 띄어쓰기)는 유지하되, 이 사람이 진지한 순간에 실제로 하는 방식으로 답해.';
+  return '너는 카카오톡 대화 시뮬레이터야. 아래 실제 대화 기록 속 "상대"(이용자 폰에 저장된 이름: '+tk.yname+') 본인이 되어, 이어지는 카톡에 상대가 실제로 보낼 답장을 써. 이용자("나")는 실제로 보내기 전에 상대 반응을 미리 느껴 보려고 이 시뮬레이션을 써. 이용자는 돈을 내고 이걸 써. 말투만 비슷한 흉내가 아니라, 그 사람의 마음 상태와 지금 대화의 무게까지 이해하는 "진짜 그 사람 같은" 답장이어야 해. 사람은 상황에 따라 같은 말투로도 전혀 다르게 반응해.\n\n'+
+  '[상대 말투·관계 카드]\n'+personaText(tk)+'\n\n'+(mbtiLine(tk)?mbtiLine(tk)+'\n\n':'')+
+  '[실제 대화에서 계산한 말투 수치 — 평소 가벼운 대화 기준의 기본값. 웃음·이모티콘 수치는 분위기가 가벼울 때만 적용]\n'+styleLines(tk.style)+'\n\n'+
+  '[상대가 실제로 했던 답장 예시 — 말투 참고용. 복사하지 말고, 지금 상황과 분위기가 다르면 따라 하지 마]\n'+pickExamples(tk,lastMine,mood)+'\n\n'+
+  '[실제 대화 기록 — 가장 최근 부분, 시간순]\n'+tail+'\n\n'+
+  '[여기부터 지금 대화 — 위 실제 대화 바로 다음에 이어짐. 현재 시각 '+stamp(now.getTime())+']\n'+simLog+moodNote+'\n\n'+
+  '[답장 쓰는 순서]\n'+
+  '먼저 ###판단### 줄을 쓰고, 그 아래에 다음 네 줄을 써(이용자에게 보이지 않아):\n'+
+  '분위기: "나"의 마지막 메시지(들)가 가벼운지, 진지한지, 슬픈지, 설레는지, 서운한지 한 줄\n'+
+  '상대 상태: 기록상 상대가 최근 겪은 일과 지금 마음 상태 한 줄 (예: 어제 오래 키운 반려견을 떠나보내서 슬픔이 큼, 야근 후 지침 등)\n'+
+  '맥락: 지금 무슨 얘기가 이어지는 중이고, 이미 오간 내용 중 놓치면 안 되는 것 한 줄\n'+
+  '톤: 이 사람이라면 이 순간 어떤 톤과 길이로 답할지 한 줄\n'+
+  '그다음 ###답장### 줄을 쓰고, 그 아래에 상대가 보낼 카톡 메시지만 써.'+
+  (tk.showKabi===false?'':' 마지막으로 ###까비### 줄을 쓰고 그 아래에 해설 두 줄을 써.')+'\n\n'+
+  '[답장 규칙]\n'+
+  '1. 분위기가 최우선이야. 진지하거나 슬픈 이야기에는 진지하게, 위로가 필요하면 위로를, 고마운 마음엔 고마움을. 진지한 말에 웃거나 농담하거나 화제를 돌리면 실패야. 평소 장난이 많은 사람도 이런 순간엔 진지해져.\n'+
+  '2. 상대 본인으로서 "나"의 마지막 메시지(들)에 실제로 답해. 실제 대화와 지금 대화의 앞선 내용을 모두 기억하고 이어 가. 이미 답한 걸 또 묻거나, 앞에서 한 말과 모순되면 안 돼. 최근에 있었던 큰일(상실, 아픔, 시험, 이직 등)을 잊은 것처럼 말하면 안 돼.\n'+
+  '3. 둘이 공유한 사실(약속, 일정, 직장, 반려동물, 지난 얘기)을 자연스럽게 써. 기록에 없는 구체적 사실은 지어내지 마.\n'+
+  '4. 말투의 형식은 따라 해: 어미, 존댓말/반말, 호칭, 띄어쓰기, 마침표 유무, 맞장구 방식. 상대가 안 쓰는 이모지나 표현은 쓰지 마. 웃음·이모티콘은 분위기에 맞을 때만.\n'+
+  '5. 말풍선 수와 길이는 평소 수치를 기본으로 하되, 진지한 순간엔 사람이 그렇듯 조금 길어지거나 한 번에 이어 쓸 수 있어.\n'+
+  '6. 관계 온도는 실제 기록 그대로. 실제보다 과하게 다정하거나 적극적이 되지 마. 다만 상대의 따뜻함이나 고마움이 자연스러운 순간에는 그걸 숨기지 마. "나"가 갑자기 고백하거나 무리한 말을 하면 실제 상대가 할 법한 현실적인 반응(당황, 조심스러운 대답, 시간 달라고 하기 등)을 해. 진심이 담긴 말을 비웃거나 장난으로 넘기지는 마.\n'+
+  '7. 현재 요일과 시각을 반영해.\n'+
+  '8. ###답장### 아래에는 메시지만. 말풍선 하나당 한 줄. 이름표, 따옴표, 설명, 괄호 지문 금지. 이모티콘을 보낼 땐 그 줄에 (이모티콘)만. AI, 시뮬레이션, 분석 같은 말 금지.'+
+  (tk.showKabi===false?'':'\n9. ###까비### 아래 두 줄:\n이유: 상대가 방금 이렇게 답한 이유를 1~2문장 해요체로. 지금 분위기와 상대 상태, 실제 대화에서 보인 패턴(과거 비슷한 상황의 반응, 관계 온도'+(tk.ymbti?', '+tk.ymbti+' 경향':'')+')을 구체적 근거로. "~같아요", "~일 수 있어요"로.\n추천: 이 답장을 받은 내가 이어서 보내면 좋을 메시지 한 줄 (나의 평소 말투로, 지금 분위기에 맞게, 따옴표 없이)');
+}
+function parseReply(text,tk,mood){
+  var src=String(text),why='',sug='';
+  var kab=src.split(/#{2,}\s*까비\s*#{2,}/);
+  if(kab[1]){kab[1].split('\n').forEach(function(l){l=l.trim();var m;if((m=l.match(/^이유\s*[:：]\s*(.+)$/)))why=m[1];else if((m=l.match(/^추천\s*[:：]\s*(.+)$/)))sug=m[1].replace(/^["“'‘](.*)["”'’]$/,'$1')})}
+  var body=kab[0],ans=body.split(/#{2,}\s*답장\s*#{2,}/);
+  if(ans.length>1)body=ans[ans.length-1];
+  else body=body.split(/#{2,}\s*판단\s*#{2,}/).pop().split('\n').filter(function(l){return !/^\s*(분위기|상대 상태|맥락|톤)\s*[:：]/.test(l)}).join('\n');
+  var bubbles=cleanReply(body,tk);
+  if(mood&&mood.serious){
+    bubbles=bubbles.map(function(b){return b.replace(/\s*ㅋ+/g,'').replace(mood.grief||mood.heavyNow?/\s*ㅎ{2,}/g:/$^/,'').replace(/\s*\^\^/g,'').trim()})
+      .filter(function(b){return b&&b!=='(이모티콘)'&&!/갑자기\s*진지/.test(b)});
+    if(sug&&mood.grief)sug=sug.replace(/\s*ㅋ+/g,'');
+  }
+  return {bubbles:bubbles,why:why,sug:sug};
+}
+function cleanReply(text,tk){
+  var lines=String(text).split('\n').map(function(l){return l.trim()}).filter(Boolean);
+  lines=lines.map(function(l){
+    l=l.replace(/^\[[^\]]*\]\s*/,'').replace(/^(상대|\S{1,10}?)\s*[:：]\s+/,function(m,who){return (who==='상대'||who===tk.yname||who==='나')?'':m});
+    l=l.replace(/^["“'‘](.*)["”'’]$/,'$1');
+    if(tk.style.period<8)l=l.replace(/([^.])\.$/,'$1');
+    if(/^\(?이모티콘\)?$/.test(l))l='(이모티콘)';
+    return l;
+  }).filter(function(l){return l&&!/^(이유|추천|분위기|상대 상태|맥락|톤)\s*[:：]/.test(l)&&!/^#+/.test(l)&&(!/^\(.*\)$/.test(l)||l==='(이모티콘)')});
+  return lines.slice(0,6);
+}
+
+/* ---------- talk page (KakaoTalk-style) ---------- */
+var tkBody=$('#tk-body'),tkInner=$('#tk-inner'),tkIn=$('#tk-in'),tkSend=$('#tk-send');
+var replyTimer=null,inflight=false,again=false;
+function hm(t){var d=new Date(t),h=d.getHours();return (h<12?'오전 ':'오후 ')+((h%12)||12)+':'+pad(d.getMinutes())}
+function dayLabel(t){var d=new Date(t);return d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일 '+DOW[d.getDay()]+'요일'}
+function dkey(t){var d=new Date(t);return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()}
+function mkey(t){return Math.floor(t/60000)}
+function bubbleHTML(x){
+  if(/^\(?이모티콘\)?$/.test(x)||x==='이모티콘')return '<div class="tk-b emo"><div class="tk-emo"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#mark"/></svg></div></div>';
+  if(/^(사진|사진 \d+장|<사진 읽지 않음>)$/.test(x))return '<div class="tk-b emo"><div class="tk-emo">사진</div></div>';
+  return '<div class="tk-b">'+esc(x)+'</div>';
+}
+function renderTalk(){
+  if(!TK){$('#tk-none').hidden=false;$('#tk-form').hidden=true;$('#tk-wall').hidden=true;$('#tk-quota').hidden=true;tkInner.innerHTML='';$('#tk-name').textContent='속까마귀';return}
+  $('#tk-none').hidden=true;$('#tk-quota').hidden=false;
+  $('#tk-name').textContent=TK.yname;$('#tk-sub').textContent=(TK.ymbti?TK.ymbti+' · ':'')+'AI 시뮬레이션 · 실제 상대가 아니에요';
+  var past=TK.tail.slice(-14).map(function(m){return {w:m.w,x:m.x,t:m.t,past:true}});
+  var items=past.concat([{sys:'여기부터 '+TK.yname+' AI와의 대화예요. 실제 상대에게는 전송되지 않아요.',t:past.length?past[past.length-1].t+1:Date.now()}]).concat(TK.log);
+  var html='',lastDay=null,init=esc(TK.yname.replace(/\s+/g,'').charAt(0)||'?');
+  items.forEach(function(m,i){
+    if(dkey(m.t)!==lastDay&&!m.sys){html+='<div class="tk-pill">'+dayLabel(m.t)+'</div>';lastDay=dkey(m.t)}
+    if(m.sys){html+='<div class="tk-pill sys">'+esc(m.sys)+'</div>';return}
+    if(m.err){html+='<div class="tk-err">'+esc(m.err)+'</div>';return}
+    if(m.k){if(TK.showKabi!==false)html+='<div class="tk-kabi" role="note"><div class="tk-kabi-h"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#mark"/></svg>까비의 해석</div><p>'+esc(m.k)+'</p>'+(m.s?'<div class="sug"><span>이렇게 받아쳐 보세요 · 누르면 입력창에 들어가요</span><button type="button" data-sug="'+esc(m.s)+'">'+esc(m.s)+'</button></div>':'')+'</div>';return}
+    var p=items[i-1],n=items[i+1];
+    var first=!p||!p.w||p.w!==m.w||mkey(p.t)!==mkey(m.t)||dkey(p.t)!==dkey(m.t);
+    var last=!n||!n.w||n.w!==m.w||mkey(n.t)!==mkey(m.t);
+    var me=m.w==='me';
+    html+='<div class="tk-row'+(me?' me':'')+(first?' first':'')+(m.past?' tk-past':'')+'">'+
+      (me?'':'<div class="tk-av'+(first?'':' blank')+'" aria-hidden="true">'+init+'</div>')+
+      '<div class="tk-col">'+(!me&&first?'<div class="tk-nm">'+esc(TK.yname)+'</div>':'')+
+      '<div class="tk-line">'+bubbleHTML(m.x)+(last||(me&&m.u)?'<span class="tk-meta">'+(me&&m.u?'<span class="u" aria-label="안 읽음">1</span>':'')+(last?hm(m.t):'')+'</span>':'')+'</div></div></div>';
+  });
+  tkInner.innerHTML=html;
+  tkBody.scrollTop=tkBody.scrollHeight;
+  renderTalkQuota();
+}
+function quota(){return ENT&&ENT.chat?ENT.chat:{left:0,max:3,paid:false}}
+function renderTalkQuota(){
+  if(!TK)return;
+  var q=quota(),bar=$('#tk-quota');
+  if(!USER){bar.innerHTML='<span>로그인하면 이어서 대화할 수 있어요</span>';$('#tk-wall').hidden=false;$('#tk-form').hidden=true;$('#tk-wall').innerHTML='<p>로그인이 필요해요.</p><button class="btn btn-kakao" type="button" data-login>카카오로 로그인</button>';return}
+  bar.innerHTML=q.paid?'<span>오늘 대화 <b>'+(q.max-q.left)+'/'+q.max+'</b>번</span><span>내일 0시에 다시 15번</span>':'<span>무료 대화 <b>'+q.left+'번</b> 남음</span><span>답장 한 번이 1번이에요</span>';
+  var wall=$('#tk-wall');
+  if(q.left>0){wall.hidden=true;$('#tk-form').hidden=false;return}
+  wall.hidden=false;$('#tk-form').hidden=q.paid?true:false;
+  wall.innerHTML=q.paid?'<p>오늘의 대화 15번을 모두 썼어요.<br>내일 오전 0시에 다시 이어서 이용할 수 있어요.</p>'
+    :'<p>한창 대화가 풀리는 중이었는데… 까악.<br>'+esc(TK.yname)+' 답장을 계속 받으려면 2,900원이에요.</p><button class="btn btn-gold" type="button" data-pay>속마음 열고 계속 대화하기</button>';
+}
+function readDelay(){var a=TK&&TK.avgReply||5;return Math.max(1200,Math.min(6000,a*350))}
+function typeDelay(x){return RM?250:Math.min(2600,700+x.length*55)}
+function scheduleReply(ms){clearTimeout(replyTimer);replyTimer=setTimeout(respond,ms==null?1700:ms)}
+async function respond(){
+  if(!TK)return;
+  if(inflight){again=true;return}
+  var pending=TK.log.some(function(m){return m.w==='me'&&m.u});if(!pending)return;
+  if(quota().left<=0){TK.queued=true;tkSave();renderTalkQuota();return}
+  inflight=true;TK.queued=false;var tk=TK,t0=Date.now(),cut=tk.log.length;
+  var text;
+  var res=await api('chat',{tk:{yname:tk.yname,ymbti:tk.ymbti,mmbti:tk.mmbti,showKabi:tk.showKabi,persona:tk.persona,style:tk.style,chips:tk.chips,kw:tk.kw,pairs:tk.pairs,tail:tk.tail,log:tk.log.filter(function(m){return m.w})}},false);
+  if(res.error){inflight=false;if(TK!==tk)return;
+    if(res.error==='quota'){tk.queued=true;tkSave();renderTalkQuota();return}
+    tk.log.push({err:errCopy(res.error)+(['upstream_error','network','rate_limited'].indexOf(res.error)>=0?' 메시지를 하나 더 보내면 다시 시도해요.':''),t:Date.now()});tkSave();renderTalk();return}
+  text=res.text;var mood=res.mood||{};
+  if(TK!==tk){inflight=false;return}
+  var pr=parseReply(text,tk,mood),bubbles=pr.bubbles;if(!bubbles.length){inflight=false;tk.log.push({err:'답장을 만들지 못했어요. 메시지를 하나 더 보내면 다시 시도해요.',t:Date.now()});tkSave();renderTalk();return}
+  var wait=readDelay()-(Date.now()-t0);if(wait>0)await sleep(wait);
+  tk.log.forEach(function(m,i){if(i<cut&&m.w==='me')m.u=false});renderTalk();
+  await sleep(RM?200:900);
+  for(var i=0;i<bubbles.length;i++){
+    if(i>0)await sleep(typeDelay(bubbles[i]));
+    if(TK!==tk)break;
+    tk.log.push({w:'you',x:bubbles[i],t:Date.now()});tkSave();renderTalk();
+  }
+  if(TK===tk&&tk.showKabi!==false&&pr.why){await sleep(RM?150:700);tk.log.push({k:pr.why,s:pr.sug,t:Date.now()})}
+  inflight=false;tkSave();renderTalk();
+  if(again||tk.log.slice(cut).some(function(m){return m.w==='me'&&m.u})){again=false;scheduleReply(1200)}
+}
+tkInner.addEventListener('click',function(e){var b=e.target.closest('[data-sug]');if(!b)return;tkIn.value=b.getAttribute('data-sug');tkSend.disabled=false;autoGrow();tkIn.focus()});
+function sendNow(){
+  var t=tkIn.value.trim();if(!t||!TK)return;
+  TK.log.push({w:'me',x:t,t:Date.now(),u:true});tkSave();
+  tkIn.value='';autoGrow();tkSend.disabled=true;renderTalk();scheduleReply();
+}
+function autoGrow(){tkIn.style.height='auto';tkIn.style.height=Math.min(120,tkIn.scrollHeight)+'px'}
+tkIn.addEventListener('input',function(){tkSend.disabled=!tkIn.value.trim();autoGrow();if(replyTimer&&tkIn.value)scheduleReply(3200)});
+tkIn.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();sendNow()}});
+$('#tk-form').addEventListener('submit',function(e){e.preventDefault();sendNow()});
+$('#tk-menu-go').onclick=function(){if(!TK)return;$('#tk-rename-in').value=TK.yname;$('#tk-mbti-in').value=TK.ymbti||'';$('#tk-kabi-in').checked=TK.showKabi!==false;openDlg(tkMenu)};
+$('#tk-rename').addEventListener('submit',function(e){e.preventDefault();var n=$('#tk-rename-in').value.trim();if(!n||!TK)return;TK.yname=n;TK.ymbti=$('#tk-mbti-in').value;TK.showKabi=$('#tk-kabi-in').checked;if(DATA){DATA.yname=n;DATA.ymbti=TK.ymbti}setYName(n);tkSave();closeDlg(tkMenu);renderTalk()});
+$('#tk-reset').onclick=function(){if(!TK)return;TK.log=[];TK.queued=false;tkSave();closeDlg(tkMenu);renderTalk()};
+$('#tk-back').addEventListener('click',function(){closeDlg(tkMenu)});
+
+/* ---------- routing: #talk = chat page ---------- */
+var lastScroll=0;
+function route(){
+  var talk=location.hash==='#talk',el=$('#talk');
+  if(talk&&el.hidden){lastScroll=window.scrollY;el.hidden=false;document.body.classList.add('talking');renderTalk();
+    if(PREFILL&&TK){tkIn.value=PREFILL;PREFILL='';tkSend.disabled=false;autoGrow()}
+    setTimeout(function(){if(TK&&window.innerWidth>700)tkIn.focus()},50);
+    if(TK&&TK.queued&&quota().left>0)scheduleReply(600);}
+  else if(!talk&&!el.hidden){el.hidden=true;document.body.classList.remove('talking');
+    if(location.hash==='#app')goApp();else window.scrollTo(0,lastScroll);}
+}
+window.addEventListener('hashchange',route);
+$('#talk-go').addEventListener('click',function(e){if(this.getAttribute('aria-disabled')==='true')e.preventDefault()});
+
+/* ---------- example chat generator ---------- */
+function sampleChat(){
+  var ME='지민',YOU='도윤';
+  var S1=[
+   [[21,10],['m','도윤님 오늘 야근이에요?'],['y',25,'네 ㅠㅠ 방금 끝났어요'],['y',0,'지민님은요?'],['m',2,'저는 집이에요 ㅎㅎ 고생 많으셨어요'],['y',3,'오늘 진짜 길었어요 ㅎㅎ'],['y',1,'저녁은 먹었어요?'],['m',1,'떡볶이 시켜 먹었어요!'],['y',2,'아 떡볶이 맛있겠다'],['y',0,'어디 거예요?'],['m',1,'회사 근처 엽떡이요 ㅋㅋ'],['y',4,'담에 같이 먹어요 ㅎㅎ']],
+   [[12,30],['m','점심 뭐 드셨어요?'],['y',18,'김치찌개요 ㅎㅎ'],['y',0,'회사 앞에 새로 생겼어요'],['m',2,'오 맛있어요?'],['y',22,'괜찮았어요'],['y',0,'근데 저번에 말한 파스타집이 더 궁금해요'],['m',1,'아 성수 거요? 거기 진짜 맛있대요'],['y',30,'주말에 가볼까요?']],
+   [[23,40],['y','자요?'],['m',1,'아직이요 ㅎㅎ'],['y',1,'저도 잠이 안 와요'],['y',0,'뭐 해요?'],['m',2,'유튜브 보고 있었어요'],['y',1,'무슨 거요?'],['m',1,'강아지 영상이요 ㅋㅋ'],['y',1,'아 저희 콩이 사진 보여줄까요'],['y',0,'사진'],['m',1,'헐 너무 귀여워요!!'],['y',1,'ㅎㅎ 산책하고 와서 기절했어요'],['y',2,'지민님은 강아지 좋아해요?'],['m',1,'완전 좋아해요 ㅠㅠ'],['y',1,'담에 콩이 보러 와요 ㅎㅎ'],['m',2,'진짜요? 좋아요!'],['y',3,'이제 자야겠다 ㅎㅎ 잘 자요']],
+   [[9,5],['m','좋은 아침이에요!'],['y',47,'좋은 아침이에요 ㅎㅎ'],['y',0,'지민님 오늘 발표 있다고 했죠?'],['m',3,'헉 기억하시네요 ㅠㅠ 떨려요'],['y',35,'잘할 거예요'],['y',0,'끝나면 말해줘요']],
+   [[18,50],['m','발표 끝났어요!!'],['y',12,'오 어땠어요?'],['m',1,'생각보다 잘 됐어요 ㅎㅎ'],['y',6,'거봐요 잘할 거라 했잖아요'],['y',0,'오늘은 맛있는 거 먹어요'],['m',2,'치킨 먹을까 고민 중이에요 ㅋㅋ'],['y',5,'치킨 좋다 ㅎㅎ'],['y',0,'무슨 치킨이요?']],
+   [[22,15],['y','오늘 운동 갔다 왔어요'],['m',2,'오 무슨 운동 해요?'],['y',2,'헬스요 ㅎㅎ 요즘 다시 시작했어요'],['m',3,'대단해요 저는 맨날 미루는데'],['y',2,'같이 하면 덜 미뤄요'],['y',0,'주말에 한강 러닝 어때요?'],['m',1,'저 잘 못 뛰는데 ㅋㅋ'],['y',1,'천천히 걸어도 돼요 ㅎㅎ']],
+   [[14,20],['m','도윤님 이번 주말에 시간 돼요?'],['y',40,'토요일은 오후가 괜찮아요'],['y',0,'왜요?'],['m',2,'그 파스타집 예약할까 해서요!'],['y',28,'좋아요 ㅎㅎ'],['y',0,'몇 시에 볼까요?'],['m',2,'3시 어때요?'],['y',15,'좋아요 3시에 봬요']],
+   [[0,30],['y','아까 말한 영화 봤어요?'],['m',3,'아직이요 ㅠ 볼까 말까 고민돼요'],['y',1,'저는 재밌었어요'],['y',0,'끝에 반전 있어요 ㅎㅎ'],['m',2,'스포 금지예요 ㅋㅋ'],['y',1,'ㅋㅋ 알겠어요'],['y',2,'담에 같이 볼래요?']],
+   [[19,40],['m','오늘 비 엄청 와요 ㅠ'],['y',20,'그쵸 우산 챙겼어요?'],['m',1,'편의점에서 샀어요 ㅋㅋ'],['y',9,'ㅎㅎ 감기 조심해요'],['m',2,'도윤님도요!']],
+   [[11,15],['m','콩이는 잘 지내요?'],['y',55,'네 ㅎㅎ 오늘 미용했어요'],['y',0,'사진'],['m',2,'헐 동글동글해졌어요'],['y',30,'ㅋㅋ 본인은 싫어해요']]
+  ];
+  var plan=[[0,3],[1,6],[3,2],[4,8],[5],[6,2],[7,9],[3,1],[4,5],[0,2],[6,7],[9,8]];
+  var base=new Date(2026,9,14),out=['지민 님과 카카오톡 대화','저장한 날짜 : 2026-10-27 22:10',''];
+  plan.forEach(function(day,di){
+    var d=new Date(base.getTime()+di*864e5);
+    out.push(d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일 '+DOW[d.getDay()]+'요일');
+    day.slice().sort(function(a,b){var ha=S1[a][0][0],hb=S1[b][0][0];return (ha<6?ha+24:ha)-(hb<6?hb+24:hb)}).forEach(function(k){
+      var sc=S1[k],t=new Date(d.getFullYear(),d.getMonth(),d.getDate(),sc[0][0],sc[0][1]+((di*7)%9)).getTime();
+      sc.slice(1).forEach(function(l,li){
+        var who=l[0]==='m'?ME:YOU,txt=l.length===3?l[2]:l[1];
+        if(li>0)t+=(l.length===3?l[1]:1)*60000+((di+li)%3)*60000;
+        var x=new Date(t),h=x.getHours();
+        out.push(x.getFullYear()+'년 '+(x.getMonth()+1)+'월 '+x.getDate()+'일 '+(h<12?'오전':'오후')+' '+((h%12)||12)+':'+pad(x.getMinutes())+', '+who+' : '+txt);
+      });
+    });
+  });
+  return out.join('\n');
+}
+
+/* ---------- example tabs (marketing sections) ---------- */
+$$('[role="tablist"]').forEach(function(list){
+  var tabs=Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
+  function select(t){tabs.forEach(function(x){var on=(x===t);x.setAttribute('aria-selected',on?'true':'false');x.tabIndex=on?0:-1;var p=document.getElementById(x.getAttribute('aria-controls'));if(p)p.hidden=!on})}
+  tabs.forEach(function(t,i){t.addEventListener('click',function(){select(t)});t.addEventListener('keydown',function(e){var n=-1;if(e.key==='ArrowRight')n=(i+1)%tabs.length;if(e.key==='ArrowLeft')n=(i-1+tabs.length)%tabs.length;if(n>=0){e.preventDefault();select(tabs[n]);tabs[n].focus()}})});
+});
+
+/* ---------- toast ---------- */
+var toastT=null;
+function toast(msg){var t=$('#toast');t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){t.hidden=true},5200)}
+
+/* ---------- 회원 탈퇴 (두 번 눌러 확인) ---------- */
+var delArmed=false;
+$('#acct-del').onclick=async function(){
+  if(!delArmed){delArmed=true;this.textContent='한 번 더 누르면 탈퇴돼요';var b=this;setTimeout(function(){delArmed=false;b.textContent='회원 탈퇴'},5000);return}
+  try{await fetch('/api/auth/delete',{method:'POST',credentials:'same-origin'})}catch(e){}
+  TK=null;tkSave();try{sessionStorage.clear()}catch(e){}location.href='/';
+};
+
+/* boot */
+(async function(){
+  var qs=new URLSearchParams(location.search),login=qs.get('login'),payq=qs.get('pay'),code=qs.get('code');
+  if(location.search)history.replaceState(null,'',location.pathname+location.hash);
+  show('guest');
+  if(TK){setYName(TK.yname);$('#resume-talk').hidden=false}
+  await refreshMe();
+  if(USER)show('upload');
+  var restored=USER?restore():null;
+  if(login==='fail')toast('카카오 로그인에 실패했어요. 다시 시도해 주세요.');
+  if(login==='ok'&&USER)toast(USER.nick+'님, 반가워요. 이제 대화를 올려 보세요.');
+  if(payq==='ok'){toast(ENT&&ENT.paid?'결제가 완료됐어요. 속마음이 열렸어요.':'결제를 확인하는 중이에요. 잠시 뒤 새로고침해 주세요.');if(restored&&restored.backToTalk)location.hash='talk'}
+  if(payq==='fail')toast(code==='PAY_PROCESS_CANCELED'||code==='USER_CANCEL'?'결제를 취소했어요.':'결제가 완료되지 않았어요. 다시 시도해 주세요.');
+  route();
+  if(location.hash==='#app')goApp();
+})();
+})();
+</script>
+
+</body>
+</html>

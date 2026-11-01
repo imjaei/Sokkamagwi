@@ -1,0 +1,12 @@
+{
+  "name": "sokkamagwi",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "속까마귀 — 카톡 대화로 읽는 쌍방 신호 리포트와 그 사람 AI 채팅",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "dev": "vercel dev",
+    "check": "node scripts/smoke-test.js"
+  }
+}
